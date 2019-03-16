@@ -1,0 +1,18 @@
+{
+    "name": "robertogallea/php-fatturapa",
+    "description": "Php package for Fattura Elettronica PA",
+    "authors": [
+        {
+            "name": "Roberto Gallea",
+            "email": "write@robertogallea.com"
+        }
+    ],
+    "require": {
+        "sabre/xml": "^2.1"
+    },
+	"autoload": {
+        "psr-4": {
+            "Robertogallea\\FatturaPA\\": "src/"
+        }
+    }
+}
