@@ -1,7 +1,6 @@
 # php-fatturapa
 php-fatturapa is a php implementation for FatturaPA XML specification. 
-It allows reading from and writing to files formatted according to the 
-specifications described in <LINK> 
+It allows reading from and writing to files formatted as described in <a href="https://www.agenziaentrate.gov.it/wps/file/Nsilib/Nsi/Schede/Comunicazioni/Fatture+e+corrispettivi/Fatture+e+corrispettivi+ST/ST+invio+di+fatturazione+elettronica/ST+Fatturazione+elettronica+-+Allegato+A/Allegato+A+-+Specifiche+tecniche+vers+1.4.pdf" target="_blank">the current specifications</a> 
 <br>
 
 ## 1. Installation
