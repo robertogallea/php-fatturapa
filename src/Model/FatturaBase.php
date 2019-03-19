@@ -9,13 +9,32 @@
 namespace Robertogallea\FatturaPA\Model;
 
 
-abstract class FatturaBase
+use Sabre\Xml\XmlSerializable;
+
+abstract class FatturaBase implements XmlSerializable
 {
     const PRIVATI_12 = 'FPR12';
     const PUBBLICA_AMMINISTRAZIONE_12 = 'FPA12';
 
-    public $Versione;
+    /** @var string */
+    protected $versione;
 
+    /**
+     * @return string
+     */
+    public function getVersione()
+    {
+        return $this->versione;
+    }
 
+    /**
+     * @param string $Versione
+     * @return FatturaBase
+     */
+    public function setVersione($versione)
+    {
+        $this->versione = $versione;
+        return $this;
+    }
 
 }

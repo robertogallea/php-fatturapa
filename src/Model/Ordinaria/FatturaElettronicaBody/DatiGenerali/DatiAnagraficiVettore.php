@@ -6,7 +6,7 @@
  * Time: 21:36
  */
 
-namespace Robertogallea\FatturaPA\Model\FatturaElettronicaBody\DatiGenerali;
+namespace Robertogallea\FatturaPA\Model\Ordinaria\FatturaElettronicaBody\DatiGenerali;
 
 
 use Robertogallea\FatturaPA\Model\Common\DatiAnagrafici\Anagrafica;
@@ -14,12 +14,15 @@ use Robertogallea\FatturaPA\Model\Common\DatiAnagrafici\DatiAnagrafici;
 use Robertogallea\FatturaPA\Model\Common\DatiAnagrafici\IdFiscaleIVA;
 use Robertogallea\FatturaPA\Traits\Traversable;
 use Sabre\Xml\Reader;
+use Sabre\Xml\Writer;
+use Sabre\Xml\XmlSerializable;
 
-class DatiAnagraficiVettore extends DatiAnagrafici
+class DatiAnagraficiVettore extends DatiAnagrafici implements XmlSerializable
 {
     use Traversable;
 
-    public $NumeroLicenzaGuida;
+    /** @var string */
+    protected $NumeroLicenzaGuida;
 
     private function traverse(Reader $reader)
     {
@@ -33,19 +36,42 @@ class DatiAnagraficiVettore extends DatiAnagrafici
                 $this->Anagrafica = $child['value'];
             } elseif ($child['name'] === '{}CodiceFiscale') {
                 $this->CodiceFiscale = $child['value'];
-            } elseif ($child['name'] === '{}AlboProfessionale') {
-                $this->AlboProfessionale = $child['value'];
-            } elseif ($child['name'] === '{}ProvinciaAlbo') {
-                $this->ProvinciaAlbo = $child['value'];
-            } elseif ($child['name'] === '{}NumeroIscrizioneAlbo') {
-                $this->NumeroIscrizioneAlbo = $child['value'];
-            } elseif ($child['name'] === '{}DataIscrizioneAlbo') {
-                $this->DataIscrizioneAlbo= $child['value'];
-            } elseif ($child['name'] === '{}RegimeFiscale') {
-                $this->RegimeFiscale = $child['value'];
             } elseif ($child['name'] === '{}NumeroLicenzaGuida') {
                 $this->NumeroLicenzaGuida = $child['value'];
             }
         }
     }
+
+    function xmlSerialize(Writer $writer)
+    {
+        $data = array();
+        $this->IdFiscaleIVA ? $data['IdFiscaleIVA'] = $this->IdFiscaleIVA : null;
+        $this->CodiceFiscale ? $data['CodiceFiscale'] = $this->CodiceFiscale : null;
+        $this->Anagrafica ? $data['Anagrafica'] = $this->Anagrafica : null;
+        $this->NumeroLicenzaGuida ? $data['NumeroLicenzaGuida'] = $this->NumeroLicenzaGuida : null;
+        $writer->write($data);
+    }
+
+    /**
+     * @return string
+     */
+    public function getNumeroLicenzaGuida()
+    {
+        return $this->NumeroLicenzaGuida;
+    }
+
+    /**
+     * @param string $NumeroLicenzaGuida
+     * @return DatiAnagraficiVettore
+     */
+    public function setNumeroLicenzaGuida($NumeroLicenzaGuida)
+    {
+        if (strlen($NumeroLicenzaGuida) > 20) {
+            throw new InvalidValueException("NumeroLicenzaGuida must be a string of maximum 20 characters");
+        }
+        $this->NumeroLicenzaGuida = $NumeroLicenzaGuida;
+        return $this;
+    }
+
+
 }

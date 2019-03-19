@@ -6,18 +6,23 @@
  * Time: 21:36
  */
 
-namespace Robertogallea\FatturaPA\Model\FatturaElettronicaBody\DatiBeniServizi;
+namespace Robertogallea\FatturaPA\Model\Ordinaria\FatturaElettronicaBody\DatiBeniServizi;
 
 
 use Robertogallea\FatturaPA\Traits\Traversable;
 use Sabre\Xml\Reader;
+use Sabre\Xml\Writer;
+use Sabre\Xml\XmlSerializable;
 
-class DatiBeniServizi
+class DatiBeniServizi implements XmlSerializable
 {
     use Traversable;
 
-    public $DettaglioLinee;
-    public $DatiRiepilogo;
+    /** @var DettaglioLinee[] */
+    protected $DettaglioLinee;
+
+    /** @var DatiRiepilogo[] */
+    protected $DatiRiepilogo;
 
 
     private function traverse(Reader $reader)
@@ -32,4 +37,59 @@ class DatiBeniServizi
             }
         }
     }
+
+    function xmlSerialize(Writer $writer)
+    {
+        $data = array();
+        if ($this->DettaglioLinee) {
+            foreach ($this->DettaglioLinee as $DettaglioLinee) {
+                $data[] = ['name' => 'DettaglioLinee', 'value' => $DettaglioLinee];
+            }
+        }
+        if ($this->DatiRiepilogo) {
+            foreach ($this->DatiRiepilogo as $DatiRiepilogo) {
+                $data[] = ['name' => 'DatiRiepilogo', 'value' => $DatiRiepilogo];
+            }
+        }
+
+        $writer->write($data);
+    }
+
+    /**
+     * @return DettaglioLinee[]
+     */
+    public function getDettaglioLinee()
+    {
+        return $this->DettaglioLinee;
+    }
+
+    /**
+     * @param DettaglioLinee[] $DettaglioLinee
+     * @return DatiBeniServizi
+     */
+    public function setDettaglioLinee($DettaglioLinee)
+    {
+        $this->DettaglioLinee = $DettaglioLinee;
+        return $this;
+    }
+
+    /**
+     * @return DatiRiepilogo[]
+     */
+    public function getDatiRiepilogo()
+    {
+        return $this->DatiRiepilogo;
+    }
+
+    /**
+     * @param DatiRiepilogo[] $DatiRiepilogo
+     * @return DatiBeniServizi
+     */
+    public function setDatiRiepilogo($DatiRiepilogo)
+    {
+        $this->DatiRiepilogo = $DatiRiepilogo;
+        return $this;
+    }
+
+
 }

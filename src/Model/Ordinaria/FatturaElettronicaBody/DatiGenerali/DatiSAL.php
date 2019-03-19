@@ -6,17 +6,21 @@
  * Time: 21:38
  */
 
-namespace Robertogallea\FatturaPA\Model\FatturaElettronicaBody\DatiGenerali;
+namespace Robertogallea\FatturaPA\Model\Ordinaria\FatturaElettronicaBody\DatiGenerali;
 
 
+use Robertogallea\FatturaPA\Exceptions\InvalidValueException;
 use Robertogallea\FatturaPA\Traits\Traversable;
 use Sabre\Xml\Reader;
+use Sabre\Xml\Writer;
+use Sabre\Xml\XmlSerializable;
 
-class DatiSAL
+class DatiSAL implements XmlSerializable
 {
     use Traversable;
 
-    public $RiferimentoFase;
+    /** @var string */
+    protected $RiferimentoFase;
 
     private function traverse(Reader $reader)
     {
@@ -28,4 +32,34 @@ class DatiSAL
             }
         }
     }
+
+    function xmlSerialize(Writer $writer)
+    {
+        $data = array();
+        $this->RiferimentoFase ? $data['RiferimentoFase'] = $this->RiferimentoFase : null;
+        $writer->write($data);
+    }
+
+    /**
+     * @return string
+     */
+    public function getRiferimentoFase()
+    {
+        return $this->RiferimentoFase;
+    }
+
+    /**
+     * @param string $RiferimentoFase
+     * @return DatiSAL
+     */
+    public function setRiferimentoFase($RiferimentoFase)
+    {
+        if (strlen($RiferimentoFase) > 3) {
+            throw new InvalidValueException("RiferimentoFase must be a string of maximum 2 characters");
+        }
+        $this->RiferimentoFase = $RiferimentoFase;
+        return $this;
+    }
+    
+    
 }

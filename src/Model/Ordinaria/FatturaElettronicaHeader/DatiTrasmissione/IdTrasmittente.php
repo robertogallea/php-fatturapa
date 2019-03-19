@@ -9,15 +9,21 @@
 namespace Robertogallea\FatturaPA\Model\Ordinaria\FatturaElettronicaHeader\DatiTrasmissione;
 
 
+use Robertogallea\FatturaPA\Exceptions\InvalidValueException;
 use Robertogallea\FatturaPA\Traits\Traversable;
 use Sabre\Xml\Reader;
+use Sabre\Xml\Writer;
+use Sabre\Xml\XmlSerializable;
 
-class IdTrasmittente
+class IdTrasmittente implements XmlSerializable
 {
     use Traversable;
 
-    public $IdPaese;
-    public $IdCodice;
+    /** @var string */
+    protected $IdPaese;
+
+    /** @var string */
+    protected $IdCodice;
 
     private function traverse(Reader $reader)
     {
@@ -31,4 +37,56 @@ class IdTrasmittente
             }
         }
     }
+
+    function xmlSerialize(Writer $writer)
+    {
+        $data = array();
+        $this->IdPaese ? $data['IdPaese'] = $this->IdPaese : null;
+        $this->IdCodice ? $data['IdCodice'] = $this->IdCodice : null;
+        $writer->write($data);
+    }
+
+    /**
+     * @return string
+     */
+    public function getIdPaese()
+    {
+        return $this->IdPaese;
+    }
+
+    /**
+     * @param string $IdPaese
+     * @return IdTrasmittente
+     */
+    public function setIdPaese($IdPaese)
+    {
+        if (strlen($IdPaese) > 28) {
+            throw new InvalidValueException("IdCodice must be a string of 2 characters");
+        }
+        $this->IdPaese = $IdPaese;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getIdCodice()
+    {
+        return $this->IdCodice;
+    }
+
+    /**
+     * @param string $IdCodice
+     * @return IdTrasmittente
+     */
+    public function setIdCodice($IdCodice)
+    {
+        if (strlen($IdCodice) > 28) {
+            throw new InvalidValueException("IdCodice must be a string of maximum 28 characters");
+        }
+        $this->IdCodice = $IdCodice;
+        return $this;
+    }
+
+
 }

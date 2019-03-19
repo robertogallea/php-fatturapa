@@ -11,65 +11,65 @@ use Robertogallea\FatturaPA\Model\Common\DatiAnagrafici\Anagrafica;
 use Robertogallea\FatturaPA\Model\Common\DatiAnagrafici\DatiAnagrafici;
 use Robertogallea\FatturaPA\Model\Common\DatiAnagrafici\IdFiscaleIVA;
 use Robertogallea\FatturaPA\Model\Common\Sede\Sede;
-use Robertogallea\FatturaPA\Model\FatturaBase;
-use Robertogallea\FatturaPA\Model\FatturaElettronicaBody\Allegati\Allegati;
-use Robertogallea\FatturaPA\Model\FatturaElettronicaBody\DatiBeniServizi\AltriDatiGestionali;
-use Robertogallea\FatturaPA\Model\FatturaElettronicaBody\DatiBeniServizi\CodiceArticolo;
-use Robertogallea\FatturaPA\Model\FatturaElettronicaBody\DatiBeniServizi\DatiBeniServizi;
-use Robertogallea\FatturaPA\Model\FatturaElettronicaBody\DatiBeniServizi\DatiRiepilogo;
-use Robertogallea\FatturaPA\Model\FatturaElettronicaBody\DatiBeniServizi\DettaglioLinee;
-use Robertogallea\FatturaPA\Model\FatturaElettronicaBody\DatiGenerali\DatiAnagraficiVettore;
-use Robertogallea\FatturaPA\Model\FatturaElettronicaBody\DatiGenerali\DatiBollo;
-use Robertogallea\FatturaPA\Model\FatturaElettronicaBody\DatiGenerali\DatiCassaPrevidenziale;
-use Robertogallea\FatturaPA\Model\FatturaElettronicaBody\DatiGenerali\DatiContratto;
-use Robertogallea\FatturaPA\Model\FatturaElettronicaBody\DatiGenerali\DatiConvenzione;
-use Robertogallea\FatturaPA\Model\FatturaElettronicaBody\DatiGenerali\DatiDDT;
-use Robertogallea\FatturaPA\Model\FatturaElettronicaBody\DatiGenerali\DatiFattureCollegate;
-use Robertogallea\FatturaPA\Model\FatturaElettronicaBody\DatiGenerali\DatiGenerali;
-use Robertogallea\FatturaPA\Model\FatturaElettronicaBody\DatiGenerali\DatiGeneraliDocumento;
-use Robertogallea\FatturaPA\Model\FatturaElettronicaBody\DatiGenerali\DatiOrdineAcquisto;
-use Robertogallea\FatturaPA\Model\FatturaElettronicaBody\DatiGenerali\DatiRicezione;
-use Robertogallea\FatturaPA\Model\FatturaElettronicaBody\DatiGenerali\DatiRitenuta;
-use Robertogallea\FatturaPA\Model\FatturaElettronicaBody\DatiGenerali\DatiSAL;
-use Robertogallea\FatturaPA\Model\FatturaElettronicaBody\DatiGenerali\DatiTrasporto;
-use Robertogallea\FatturaPA\Model\FatturaElettronicaBody\DatiGenerali\FatturaPrincipale;
-use Robertogallea\FatturaPA\Model\FatturaElettronicaBody\DatiPagamento\DatiPagamento;
-use Robertogallea\FatturaPA\Model\FatturaElettronicaBody\DatiPagamento\DettaglioPagamento;
-use Robertogallea\FatturaPA\Model\FatturaElettronicaBody\DatiVeicoli\DatiVeicoli;
+use Robertogallea\FatturaPA\Model\Ordinaria\FatturaElettronicaBody\Allegati\Allegati;
+use Robertogallea\FatturaPA\Model\Ordinaria\FatturaElettronicaBody\DatiBeniServizi\AltriDatiGestionali;
+use Robertogallea\FatturaPA\Model\Ordinaria\FatturaElettronicaBody\DatiBeniServizi\CodiceArticolo;
+use Robertogallea\FatturaPA\Model\Ordinaria\FatturaElettronicaBody\DatiBeniServizi\DatiBeniServizi;
+use Robertogallea\FatturaPA\Model\Ordinaria\FatturaElettronicaBody\DatiBeniServizi\DatiRiepilogo;
+use Robertogallea\FatturaPA\Model\Ordinaria\FatturaElettronicaBody\DatiBeniServizi\DettaglioLinee;
+use Robertogallea\FatturaPA\Model\Ordinaria\FatturaElettronicaBody\DatiGenerali\DatiAnagraficiVettore;
+use Robertogallea\FatturaPA\Model\Ordinaria\FatturaElettronicaBody\DatiGenerali\DatiBollo;
+use Robertogallea\FatturaPA\Model\Ordinaria\FatturaElettronicaBody\DatiGenerali\DatiCassaPrevidenziale;
+use Robertogallea\FatturaPA\Model\Ordinaria\FatturaElettronicaBody\DatiGenerali\DatiContratto;
+use Robertogallea\FatturaPA\Model\Ordinaria\FatturaElettronicaBody\DatiGenerali\DatiConvenzione;
+use Robertogallea\FatturaPA\Model\Ordinaria\FatturaElettronicaBody\DatiGenerali\DatiDDT;
+use Robertogallea\FatturaPA\Model\Ordinaria\FatturaElettronicaBody\DatiGenerali\DatiFattureCollegate;
+use Robertogallea\FatturaPA\Model\Ordinaria\FatturaElettronicaBody\DatiGenerali\DatiGenerali;
+use Robertogallea\FatturaPA\Model\Ordinaria\FatturaElettronicaBody\DatiGenerali\DatiGeneraliDocumento;
+use Robertogallea\FatturaPA\Model\Ordinaria\FatturaElettronicaBody\DatiGenerali\DatiOrdineAcquisto;
+use Robertogallea\FatturaPA\Model\Ordinaria\FatturaElettronicaBody\DatiGenerali\DatiRicezione;
+use Robertogallea\FatturaPA\Model\Ordinaria\FatturaElettronicaBody\DatiGenerali\DatiRitenuta;
+use Robertogallea\FatturaPA\Model\Ordinaria\FatturaElettronicaBody\DatiGenerali\DatiSAL;
+use Robertogallea\FatturaPA\Model\Ordinaria\FatturaElettronicaBody\DatiGenerali\DatiTrasporto;
+use Robertogallea\FatturaPA\Model\Ordinaria\FatturaElettronicaBody\DatiGenerali\FatturaPrincipale;
+use Robertogallea\FatturaPA\Model\Ordinaria\FatturaElettronicaBody\DatiPagamento\DatiPagamento;
+use Robertogallea\FatturaPA\Model\Ordinaria\FatturaElettronicaBody\DatiPagamento\DettaglioPagamento;
+use Robertogallea\FatturaPA\Model\Ordinaria\FatturaElettronicaBody\DatiVeicoli\DatiVeicoli;
 use Robertogallea\FatturaPA\Model\Ordinaria\FatturaElettronicaBody\DatiGenerali\ScontoMaggiorazione;
 use Robertogallea\FatturaPA\Model\Ordinaria\FatturaElettronicaBody\FatturaElettronicaBody;
 use Robertogallea\FatturaPA\Model\Ordinaria\FatturaElettronicaHeader\CedentePrestatore\CedentePrestatore;
 use Robertogallea\FatturaPA\Model\Ordinaria\FatturaElettronicaHeader\CedentePrestatore\Contatti;
-use Robertogallea\FatturaPA\Model\Ordinaria\FatturaElettronicaHeader\CedentePrestatore\IscrizioneRea;
+use Robertogallea\FatturaPA\Model\Ordinaria\FatturaElettronicaHeader\CedentePrestatore\IscrizioneREA;
 use Robertogallea\FatturaPA\Model\Ordinaria\FatturaElettronicaHeader\CedentePrestatore\StabileOrganizzazione;
 use Robertogallea\FatturaPA\Model\Ordinaria\FatturaElettronicaHeader\CessionarioCommittente\CessionarioCommittente;
-use Robertogallea\FatturaPA\Model\Ordinaria\FatturaElettronicaHeader\DatiTrasmissione\ContattiTrasmittente;
 use Robertogallea\FatturaPA\Model\Ordinaria\FatturaElettronicaHeader\DatiTrasmissione\DatiTrasmissione;
 use Robertogallea\FatturaPA\Model\Ordinaria\FatturaElettronicaHeader\DatiTrasmissione\IdTrasmittente;
 use Robertogallea\FatturaPA\Model\Ordinaria\FatturaElettronicaHeader\FatturaElettronicaHeader;
 use Robertogallea\FatturaPA\Model\Ordinaria\FatturaElettronicaHeader\RappresentanteFiscale\RappresentanteFiscale;
-use Robertogallea\FatturaPA\Model\Ordinaria\FatturaElettronicaHeader\SoggettoEmittente\SoggettoEmittente;
 use Robertogallea\FatturaPA\Model\Ordinaria\FatturaElettronicaHeader\TerzoIntermediarioOSoggettoEmittente\TerzoIntermediarioOSoggettoEmittente;
 use Robertogallea\FatturaPA\Model\Ordinaria\FatturaOrdinaria;
+use RobRichards\XMLSecLibs\XMLSecurityDSig;
+use RobRichards\XMLSecLibs\XMLSecurityKey;
 use Sabre\Xml\Reader;
 use Sabre\Xml\Service;
+use Sabre\Xml\Writer;
 
 
 class FatturaPA {
 
 	
-	public static function createFromFile($filename)
+	public static function readFromXML($filename)
 	{
 		$file = fopen($filename, "r") or die("Unable to open file!");
         $string = fread($file,filesize($filename));
-		return self::createFromString($string);
+		return self::readFromString($string);
 	}
 
-	public static function createFromString($string)
+	public static function readFromString($string)
     {
         $service = new Service();
         $service->elementMap = [
-            // handle a collection of books
+
             '{http://ivaservizi.agenziaentrate.gov.it/docs/xsd/fatture/v1.2}FatturaElettronica' => function(Reader $reader) {
                 $fatturaElettronica = new FatturaOrdinaria();
                 $fatturaElettronica->traverse($reader);
@@ -77,7 +77,6 @@ class FatturaPA {
                 return $fatturaElettronica;
             },
 
-            // handle a single FatturaElettronicaHeader
             'FatturaElettronicaHeader' => function(Reader $reader) {
                 $fatturaElettronicaHeader = new FatturaElettronicaHeader();
                 $fatturaElettronicaHeader->traverse($reader);
@@ -122,7 +121,7 @@ class FatturaPA {
             },
 
             'IscrizioneREA' => function(Reader $reader) {
-                $iscrizioneREA = new IscrizioneRea();
+                $iscrizioneREA = new IscrizioneREA();
                 $iscrizioneREA->traverse($reader);
 
                 return $iscrizioneREA;
@@ -177,33 +176,11 @@ class FatturaPA {
                 return $idTrasmittente;
             },
 
-
-
-
-
-
-
-            // handle a single FatturaElettronicaBody
             'FatturaElettronicaBody' => function(Reader $reader) {
                 $fatturaElettronicaBody = new FatturaElettronicaBody();
                 $fatturaElettronicaBody->traverse($reader);
 
                 return $fatturaElettronicaBody;
-
-                /*
-                // Borrowing a parser from the KeyValue class.
-
-                $keyValue = keyValue($reader);
-
-                                if (isset($keyValue['title'])) {
-                                    $book->title = $keyValue['title'];
-                                }
-                                if (isset($keyValue['author'])) {
-                                    $book->author = $keyValue['author'];
-                                }
-                                */
-
-
             },
 
             'DatiGenerali' => function(Reader $reader) {
@@ -392,13 +369,31 @@ class FatturaPA {
         return $service->parse($string);
     }
 
-    public static function createFromSignedFile($filename) {
+    public static function readFromSignedXML($filename) {
         $file = fopen($filename, "r") or die("Unable to open file!");
         $string = fread($file,filesize($filename));
 
         $parsedXML = self::stripP7MData($string);
 
-        return self::createFromString($parsedXML);
+        return self::readFromString($parsedXML);
+    }
+
+    public static function writeToXMLString($fattura)
+    {
+        $service = new Service();
+        $data = $service->write('{http://ivaservizi.agenziaentrate.gov.it/docs/xsd/fatture/v1.2}FatturaElettronica' , function (Writer $writer) use ($fattura) {
+            $writer->writeAttribute('versione', $fattura->getVersione());
+            $writer->write($fattura);
+        });
+        return $data;
+    }
+
+    public static function writeToXML($fattura, $filename)
+    {
+        $xml = FatturaPA::writeToXMLString($fattura);
+
+        $file = fopen($filename, "w") or die("Unable to open file!");
+        fwrite($file,$xml);
     }
 
     private static function stripP7MData($string) {
@@ -418,4 +413,6 @@ class FatturaPA {
 
         return $str;
     }
+
+
 }

@@ -6,7 +6,7 @@
  * Time: 09:49
  */
 
-namespace Robertogallea\FatturaPA\Model\Ordinaria\FatturaElettronicaHeader\CedentePrestatore;
+namespace Robertogallea\FatturaPA\Model\Common;
 
 
 use Robertogallea\FatturaPA\Model\Common\Sede\Sede;
