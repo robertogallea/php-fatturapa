@@ -6,7 +6,7 @@
  * Time: 09:28
  */
 
-namespace Robertogallea\FatturaPA\Model\Common\Sede;
+namespace Robertogallea\FatturaPA\Model\Common;
 
 
 use Robertogallea\FatturaPA\Exceptions\InvalidValueException;

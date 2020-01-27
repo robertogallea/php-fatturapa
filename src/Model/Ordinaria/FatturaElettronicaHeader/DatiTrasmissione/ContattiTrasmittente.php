@@ -29,6 +29,10 @@ class ContattiTrasmittente implements XmlSerializable
     {
         $children = $reader->parseInnerTree();
 
+        if (is_null($children)) {
+            return;
+        }
+
         foreach($children as $child) {
             if ($child['name'] === '{}Telefono') {
                 $this->Telefono = $child['value'];

@@ -6,7 +6,7 @@
  * Time: 10:20
  */
 
-namespace Robertogallea\FatturaPA\Model\Common\ScontoMaggiorazione;
+namespace Robertogallea\FatturaPA\Model\Common;
 
 
 use Robertogallea\FatturaPA\Exceptions\InvalidValueException;

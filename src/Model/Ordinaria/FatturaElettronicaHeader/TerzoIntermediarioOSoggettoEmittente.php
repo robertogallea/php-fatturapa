@@ -6,13 +6,16 @@
  * Time: 21:33
  */
 
-namespace Robertogallea\FatturaPA\Model\Ordinaria\FatturaElettronicaHeader\TerzoIntermediarioOSoggettoEmittente;
+namespace Robertogallea\FatturaPA\Model\Ordinaria\FatturaElettronicaHeader;
 
 
+use Robertogallea\FatturaPA\Model\Common\DatiAnagrafici;
 use Robertogallea\FatturaPA\Traits\Traversable;
 use Sabre\Xml\Reader;
+use Sabre\Xml\Writer;
+use Sabre\Xml\XmlSerializable;
 
-class TerzoIntermediarioOSoggettoEmittente
+class TerzoIntermediarioOSoggettoEmittente implements XmlSerializable
 {
     use Traversable;
 
@@ -27,5 +30,12 @@ class TerzoIntermediarioOSoggettoEmittente
                 $this->DatiAnagrafici = $child['value'];
             }
         }
+    }
+
+    function xmlSerialize(Writer $writer)
+    {
+        $data = array();
+        $this->DatiAnagrafici ? $data['DatiAnagrafici'] = $this->DatiAnagrafici : null;
+        $writer->write($data);
     }
 }

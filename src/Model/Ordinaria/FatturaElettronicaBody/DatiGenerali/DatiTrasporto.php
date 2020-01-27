@@ -10,6 +10,8 @@ namespace Robertogallea\FatturaPA\Model\Ordinaria\FatturaElettronicaBody\DatiGen
 
 
 use Robertogallea\FatturaPA\Exceptions\InvalidValueException;
+use Robertogallea\FatturaPA\Model\Ordinaria\FatturaElettronicaBody\DatiGenerali\DatiTrasporto\DatiAnagraficiVettore;
+use Robertogallea\FatturaPA\Model\Ordinaria\FatturaElettronicaBody\DatiGenerali\DatiTrasporto\IndirizzoResa;
 use Robertogallea\FatturaPA\Traits\Traversable;
 use Sabre\Xml\Reader;
 use Sabre\Xml\Writer;

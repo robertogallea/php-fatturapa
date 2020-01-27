@@ -9,7 +9,7 @@
 namespace Robertogallea\FatturaPA\Model\Common;
 
 
-use Robertogallea\FatturaPA\Model\Common\Sede\Sede;
+use Robertogallea\FatturaPA\Model\Common\Sede;
 
 class StabileOrganizzazione extends Sede
 {
