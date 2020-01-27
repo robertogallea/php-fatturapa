@@ -6,10 +6,12 @@
  * Time: 09:21
  */
 
-namespace Robertogallea\FatturaPA\Model\Common\DatiAnagrafici;
+namespace Robertogallea\FatturaPA\Model\Common;
 
 
 use Robertogallea\FatturaPA\Exceptions\InvalidValueException;
+use Robertogallea\FatturaPA\Model\Common\DatiAnagrafici\Anagrafica;
+use Robertogallea\FatturaPA\Model\Common\DatiAnagrafici\IdFiscaleIVA;
 use Robertogallea\FatturaPA\Traits\Traversable;
 use Sabre\Xml\Reader;
 use Sabre\Xml\Writer;

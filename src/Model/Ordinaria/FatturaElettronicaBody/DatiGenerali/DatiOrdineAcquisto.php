@@ -13,8 +13,9 @@ use Robertogallea\FatturaPA\Exceptions\InvalidValueException;
 use Robertogallea\FatturaPA\Traits\Traversable;
 use Sabre\Xml\Reader;
 use Sabre\Xml\Writer;
+use Sabre\Xml\XmlSerializable;
 
-class DatiOrdineAcquisto
+class DatiOrdineAcquisto implements XmlSerializable
 {
     use Traversable;
 

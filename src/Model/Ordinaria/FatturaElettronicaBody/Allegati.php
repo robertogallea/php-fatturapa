@@ -6,7 +6,7 @@
  * Time: 21:35
  */
 
-namespace Robertogallea\FatturaPA\Model\Ordinaria\FatturaElettronicaBody\Allegati;
+namespace Robertogallea\FatturaPA\Model\Ordinaria\FatturaElettronicaBody;
 
 
 use PhpZip\Exception\ZipException;

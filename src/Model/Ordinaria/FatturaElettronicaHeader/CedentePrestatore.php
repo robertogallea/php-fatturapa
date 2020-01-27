@@ -6,13 +6,15 @@
  * Time: 21:30
  */
 
-namespace Robertogallea\FatturaPA\Model\Ordinaria\FatturaElettronicaHeader\CedentePrestatore;
+namespace Robertogallea\FatturaPA\Model\Ordinaria\FatturaElettronicaHeader;
 
 
 use Robertogallea\FatturaPA\Exceptions\InvalidValueException;
-use Robertogallea\FatturaPA\Model\Common\DatiAnagrafici\DatiAnagrafici;
-use Robertogallea\FatturaPA\Model\Common\Sede\Sede;
+use Robertogallea\FatturaPA\Model\Common\DatiAnagrafici;
+use Robertogallea\FatturaPA\Model\Common\Sede;
 use Robertogallea\FatturaPA\Model\Common\StabileOrganizzazione;
+use Robertogallea\FatturaPA\Model\Ordinaria\FatturaElettronicaHeader\CedentePrestatore\Contatti;
+use Robertogallea\FatturaPA\Model\Ordinaria\FatturaElettronicaHeader\CedentePrestatore\IscrizioneREA;
 use Robertogallea\FatturaPA\Traits\Traversable;
 use Sabre\Xml\Reader;
 use Sabre\Xml\Writer;
@@ -52,10 +54,10 @@ class CedentePrestatore implements XmlSerializable
                 $this->DatiAnagrafici = $child['value'];
             } elseif ($child['value'] instanceof IscrizioneREA) {
                 $this->IscrizioneREA = $child['value'];
-            } elseif ($child['value'] instanceof Sede) {
-                $this->Sede = $child['value'];
             } elseif ($child['value'] instanceof StabileOrganizzazione) {
                 $this->StabileOrganizzazione = $child['value'];
+            } elseif ($child['value'] instanceof Sede) {
+                $this->Sede = $child['value'];
             } elseif ($child['name'] === '{}RiferimentoAmministrazione') {
                 $this->RiferimentoAmministrazione = $child['value'];
             }
@@ -71,6 +73,7 @@ class CedentePrestatore implements XmlSerializable
         $this->IscrizioneREA ? $data['IscrizioneREA'] = $this->IscrizioneREA : null;
         $this->Contatti ? $data['Contatti'] = $this->Contatti : null;
         $this->RiferimentoAmministrazione ? $data['RiferimentoAmministrazione'] = $this->RiferimentoAmministrazione : null;
+
         $writer->write($data);
     }
 
@@ -133,7 +136,7 @@ class CedentePrestatore implements XmlSerializable
      */
     public function getIscrizioneREA()
     {
-        return $this->IscrizioneRea;
+        return $this->IscrizioneREA;
     }
 
     /**

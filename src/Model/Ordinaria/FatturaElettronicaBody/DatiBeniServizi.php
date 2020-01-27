@@ -6,9 +6,11 @@
  * Time: 21:36
  */
 
-namespace Robertogallea\FatturaPA\Model\Ordinaria\FatturaElettronicaBody\DatiBeniServizi;
+namespace Robertogallea\FatturaPA\Model\Ordinaria\FatturaElettronicaBody;
 
 
+use Robertogallea\FatturaPA\Model\Ordinaria\FatturaElettronicaBody\DatiBeniServizi\DatiRiepilogo;
+use Robertogallea\FatturaPA\Model\Ordinaria\FatturaElettronicaBody\DatiBeniServizi\DettaglioLinee;
 use Robertogallea\FatturaPA\Traits\Traversable;
 use Sabre\Xml\Reader;
 use Sabre\Xml\Writer;

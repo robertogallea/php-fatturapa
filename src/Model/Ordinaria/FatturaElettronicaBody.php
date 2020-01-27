@@ -6,14 +6,14 @@
  * Time: 21:35
  */
 
-namespace Robertogallea\FatturaPA\Model\Ordinaria\FatturaElettronicaBody;
+namespace Robertogallea\FatturaPA\Model\Ordinaria;
 
 
-use Robertogallea\FatturaPA\Model\Ordinaria\FatturaElettronicaBody\Allegati\Allegati;
-use Robertogallea\FatturaPA\Model\Ordinaria\FatturaElettronicaBody\DatiBeniServizi\DatiBeniServizi;
-use Robertogallea\FatturaPA\Model\Ordinaria\FatturaElettronicaBody\DatiGenerali\DatiGenerali;
-use Robertogallea\FatturaPA\Model\Ordinaria\FatturaElettronicaBody\DatiPagamento\DatiPagamento;
-use Robertogallea\FatturaPA\Model\Ordinaria\FatturaElettronicaBody\DatiVeicoli\DatiVeicoli;
+use Robertogallea\FatturaPA\Model\Ordinaria\FatturaElettronicaBody\Allegati;
+use Robertogallea\FatturaPA\Model\Ordinaria\FatturaElettronicaBody\DatiBeniServizi;
+use Robertogallea\FatturaPA\Model\Ordinaria\FatturaElettronicaBody\DatiGenerali;
+use Robertogallea\FatturaPA\Model\Ordinaria\FatturaElettronicaBody\DatiPagamento;
+use Robertogallea\FatturaPA\Model\Ordinaria\FatturaElettronicaBody\DatiVeicoli;
 use Robertogallea\FatturaPA\Traits\Traversable;
 use Sabre\Xml\Reader;
 use Sabre\Xml\Writer;

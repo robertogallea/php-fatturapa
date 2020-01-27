@@ -10,7 +10,9 @@ namespace Robertogallea\FatturaPA\Model\Ordinaria\FatturaElettronicaBody\DatiBen
 
 
 use Robertogallea\FatturaPA\Exceptions\InvalidValueException;
-use Robertogallea\FatturaPA\Model\Ordinaria\FatturaElettronicaBody\DatiGenerali\ScontoMaggiorazione;
+use Robertogallea\FatturaPA\Model\Ordinaria\FatturaElettronicaBody\DatiBeniServizi\DettaglioLinee\AltriDatiGestionali;
+use Robertogallea\FatturaPA\Model\Ordinaria\FatturaElettronicaBody\DatiBeniServizi\DettaglioLinee\CodiceArticolo;
+use Robertogallea\FatturaPA\Model\Common\ScontoMaggiorazione;
 use Robertogallea\FatturaPA\Traits\Traversable;
 use Sabre\Xml\Reader;
 use Sabre\Xml\Writer;
@@ -86,7 +88,7 @@ class DettaglioLinee implements XmlSerializable
             } elseif ($child['name'] === '{}UnitaMisura') {
                 $this->UnitaMisura = $child['value'];
             } elseif ($child['name'] === '{}DataInizioPeriodo') {
-                $this->DataFinePeriodo = $child['value'];
+                $this->DataInizioPeriodo = $child['value'];
             } elseif ($child['name'] === '{}DataFinePeriodo') {
                 $this->DataFinePeriodo = $child['value'];
             } elseif ($child['name'] === '{}PrezzoUnitario') {

@@ -6,10 +6,12 @@
  * Time: 21:32
  */
 
-namespace Robertogallea\FatturaPA\Model\Ordinaria\FatturaElettronicaHeader\DatiTrasmissione;
+namespace Robertogallea\FatturaPA\Model\Ordinaria\FatturaElettronicaHeader;
 
 
 use Robertogallea\FatturaPA\Exceptions\InvalidValueException;
+use Robertogallea\FatturaPA\Model\Ordinaria\FatturaElettronicaHeader\DatiTrasmissione\ContattiTrasmittente;
+use Robertogallea\FatturaPA\Model\Ordinaria\FatturaElettronicaHeader\DatiTrasmissione\IdTrasmittente;
 use Robertogallea\FatturaPA\Traits\Traversable;
 use Sabre\Xml\Reader;
 use Sabre\Xml\Writer;
@@ -42,6 +44,9 @@ class DatiTrasmissione implements XmlSerializable
         $children = $reader->parseInnerTree();
 
         foreach($children as $child) {
+            echo $child['name'] . " --- " . "<br/>";
+            print_r($child['value']);
+            echo "<br/>" . $child['name'] . " --- " . "<br/><br/>";
             if ($child['value'] instanceof IdTrasmittente) {
                 $this->IdTrasmittente = $child['value'];
             } elseif ($child['name'] === '{}ProgressivoInvio') {

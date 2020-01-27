@@ -6,7 +6,7 @@
  * Time: 21:40
  */
 
-namespace Robertogallea\FatturaPA\Model\Ordinaria\FatturaElettronicaBody\DatiVeicoli;
+namespace Robertogallea\FatturaPA\Model\Ordinaria\FatturaElettronicaBody;
 
 
 use Robertogallea\FatturaPA\Exceptions\InvalidValueException;

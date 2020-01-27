@@ -6,9 +6,19 @@
  * Time: 21:38
  */
 
-namespace Robertogallea\FatturaPA\Model\Ordinaria\FatturaElettronicaBody\DatiGenerali;
+namespace Robertogallea\FatturaPA\Model\Ordinaria\FatturaElettronicaBody;
 
 
+use Robertogallea\FatturaPA\Model\Ordinaria\FatturaElettronicaBody\DatiGenerali\DatiContratto;
+use Robertogallea\FatturaPA\Model\Ordinaria\FatturaElettronicaBody\DatiGenerali\DatiConvenzione;
+use Robertogallea\FatturaPA\Model\Ordinaria\FatturaElettronicaBody\DatiGenerali\DatiDDT;
+use Robertogallea\FatturaPA\Model\Ordinaria\FatturaElettronicaBody\DatiGenerali\DatiFattureCollegate;
+use Robertogallea\FatturaPA\Model\Ordinaria\FatturaElettronicaBody\DatiGenerali\DatiGeneraliDocumento;
+use Robertogallea\FatturaPA\Model\Ordinaria\FatturaElettronicaBody\DatiGenerali\DatiOrdineAcquisto;
+use Robertogallea\FatturaPA\Model\Ordinaria\FatturaElettronicaBody\DatiGenerali\DatiRicezione;
+use Robertogallea\FatturaPA\Model\Ordinaria\FatturaElettronicaBody\DatiGenerali\DatiSAL;
+use Robertogallea\FatturaPA\Model\Ordinaria\FatturaElettronicaBody\DatiGenerali\DatiTrasporto;
+use Robertogallea\FatturaPA\Model\Ordinaria\FatturaElettronicaBody\DatiGenerali\FatturaPrincipale;
 use Robertogallea\FatturaPA\Traits\Traversable;
 use Sabre\Xml\Reader;
 use Sabre\Xml\Writer;
@@ -55,8 +65,6 @@ class DatiGenerali implements XmlSerializable
         foreach($children as $child) {
             if ($child['value'] instanceof DatiGeneraliDocumento) {
                 $this->DatiGeneraliDocumento = $child['value'];
-            } elseif ($child['value'] instanceof DatiOrdineAcquisto) {
-                $this->DatiOrdineAcquisto[] = $child['value'];
             } elseif ($child['value'] instanceof DatiContratto) {
                 $this->DatiContratto[] = $child['value'];
             } elseif ($child['value'] instanceof DatiConvenzione) {
@@ -69,6 +77,8 @@ class DatiGenerali implements XmlSerializable
                 $this->DatiSAL[] = $child['value'];
             } elseif ($child['value'] instanceof DatiDDT) {
                 $this->DatiDDT[] = $child['value'];
+            } elseif ($child['value'] instanceof DatiOrdineAcquisto) {
+                $this->DatiOrdineAcquisto[] = $child['value'];
             } elseif ($child['value'] instanceof DatiTrasporto) {
                 $this->DatiTrasporto = $child['value'];
             } elseif ($child['value'] instanceof FatturaPrincipale) {
@@ -94,6 +104,11 @@ class DatiGenerali implements XmlSerializable
         if ($this->DatiConvenzione) {
             foreach ($this->DatiConvenzione as $DatiConvenzione) {
                 $data[] = ['name' => 'DatiConvenzione', 'value' => $DatiConvenzione];
+            }
+        }
+        if ($this->DatiRicezione) {
+            foreach ($this->DatiRicezione as $DatiRicezione) {
+                $data[] = ['name' => 'DatiRicezione', 'value' => $DatiRicezione];
             }
         }
         if ($this->DatiFattureCollegate) {

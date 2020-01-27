@@ -12,8 +12,8 @@ namespace Robertogallea\FatturaPA\Model\Ordinaria;
 use Robertogallea\FatturaPA\Exceptions\UnknownFatturaElettronicaVersionException;
 use \Robertogallea\FatturaPA\Traits\Traversable;
 use Robertogallea\FatturaPA\Model\FatturaBase;
-use Robertogallea\FatturaPA\Model\Ordinaria\FatturaElettronicaHeader\FatturaElettronicaHeader;
-use Robertogallea\FatturaPA\Model\Ordinaria\FatturaElettronicaBody\FatturaElettronicaBody;
+use Robertogallea\FatturaPA\Model\Ordinaria\FatturaElettronicaHeader;
+use Robertogallea\FatturaPA\Model\Ordinaria\FatturaElettronicaBody;
 use Sabre\Xml\Writer;
 
 class FatturaOrdinaria extends FatturaBase

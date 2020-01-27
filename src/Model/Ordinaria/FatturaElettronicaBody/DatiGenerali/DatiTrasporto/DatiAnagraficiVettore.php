@@ -6,18 +6,18 @@
  * Time: 21:36
  */
 
-namespace Robertogallea\FatturaPA\Model\Ordinaria\FatturaElettronicaBody\DatiGenerali;
+namespace Robertogallea\FatturaPA\Model\Ordinaria\FatturaElettronicaBody\DatiGenerali\DatiTrasporto;
 
 
 use Robertogallea\FatturaPA\Model\Common\DatiAnagrafici\Anagrafica;
-use Robertogallea\FatturaPA\Model\Common\DatiAnagrafici\DatiAnagrafici;
+use Robertogallea\FatturaPA\Model\Common\DatiAnagrafici;
 use Robertogallea\FatturaPA\Model\Common\DatiAnagrafici\IdFiscaleIVA;
 use Robertogallea\FatturaPA\Traits\Traversable;
 use Sabre\Xml\Reader;
 use Sabre\Xml\Writer;
 use Sabre\Xml\XmlSerializable;
 
-class DatiAnagraficiVettore extends DatiAnagrafici implements XmlSerializable
+class DatiAnagraficiVettore extends DatiAnagrafici
 {
     use Traversable;
 

@@ -6,10 +6,10 @@
  * Time: 21:33
  */
 
-namespace Robertogallea\FatturaPA\Model\Ordinaria\FatturaElettronicaHeader\RappresentanteFiscale;
+namespace Robertogallea\FatturaPA\Model\Ordinaria\FatturaElettronicaHeader;
 
 
-use Robertogallea\FatturaPA\Model\Common\DatiAnagrafici\DatiAnagrafici;
+use Robertogallea\FatturaPA\Model\Common\DatiAnagrafici;
 use Robertogallea\FatturaPA\Traits\Traversable;
 use Sabre\Xml\Reader;
 use Sabre\Xml\Writer;
