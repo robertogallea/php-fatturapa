@@ -47,6 +47,7 @@ use Robertogallea\FatturaPA\Model\Ordinaria\FatturaElettronicaHeader;
 use Robertogallea\FatturaPA\Model\Ordinaria\FatturaElettronicaHeader\RappresentanteFiscale;
 use Robertogallea\FatturaPA\Model\Ordinaria\FatturaElettronicaHeader\TerzoIntermediarioOSoggettoEmittente;
 use Robertogallea\FatturaPA\Model\Ordinaria\FatturaOrdinaria;
+use Robertogallea\FatturaPA\Services\FatturaPAToCsv;
 use RobRichards\XMLSecLibs\XMLSecurityDSig;
 use RobRichards\XMLSecLibs\XMLSecurityKey;
 use Sabre\Xml\Reader;
@@ -464,6 +465,22 @@ class FatturaPA
             $xmlDoc->loadXML($string);
             $xmlDoc->schemaValidate($xsdValidationFile);
         }
+    }
+
+
+    /**
+     * @param string|array $filenames
+     */
+    public static function convertXmlFilesToCsv($filenames,$csvFilename) {
+
+        if (is_string($filenames)) {
+            $filenames = [$filenames];
+        }
+
+        $csvService = new FatturaPAToCsv($filenames);
+
+        $csvService->getCsvFile($csvFilename);
+
     }
 
 }
