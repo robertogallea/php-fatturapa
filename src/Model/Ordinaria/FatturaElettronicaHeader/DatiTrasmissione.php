@@ -44,9 +44,6 @@ class DatiTrasmissione implements XmlSerializable
         $children = $reader->parseInnerTree();
 
         foreach($children as $child) {
-            echo $child['name'] . " --- " . "<br/>";
-            print_r($child['value']);
-            echo "<br/>" . $child['name'] . " --- " . "<br/><br/>";
             if ($child['value'] instanceof IdTrasmittente) {
                 $this->IdTrasmittente = $child['value'];
             } elseif ($child['name'] === '{}ProgressivoInvio') {

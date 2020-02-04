@@ -12,6 +12,7 @@ use Robertogallea\FatturaPA\Model\Common\DatiAnagrafici\Anagrafica;
 use Robertogallea\FatturaPA\Model\Common\DatiAnagrafici;
 use Robertogallea\FatturaPA\Model\Common\DatiAnagrafici\IdFiscaleIVA;
 use Robertogallea\FatturaPA\Model\Common\Sede;
+use Robertogallea\FatturaPA\Model\FatturaBase;
 use Robertogallea\FatturaPA\Model\Ordinaria\FatturaElettronicaBody\Allegati;
 use Robertogallea\FatturaPA\Model\Ordinaria\FatturaElettronicaBody\DatiBeniServizi\DettaglioLinee\AltriDatiGestionali;
 use Robertogallea\FatturaPA\Model\Ordinaria\FatturaElettronicaBody\DatiBeniServizi\DettaglioLinee\CodiceArticolo;
@@ -60,6 +61,12 @@ class FatturaPA
 
     const AVAILABLE_VALIDATIONS = ['1.2.1'];
 
+
+    /**
+     * @param $filename
+     * @param null $validateVersion
+     * @return FatturaBase
+     */
     public static function readFromXML($filename, $validateVersion = null)
     {
         $file = fopen($filename, "r") or die("Unable to open file!");
@@ -67,6 +74,12 @@ class FatturaPA
         return self::readFromString($string, $validateVersion);
     }
 
+    /**
+     * @param $string
+     * @param null $validateVersion
+     * @return FatturaBase
+     * @throws \Sabre\Xml\ParseException
+     */
     public static function readFromString($string, $validateVersion = null)
     {
 
@@ -471,7 +484,7 @@ class FatturaPA
     /**
      * @param string|array $filenames
      */
-    public static function convertXmlFilesToCsv($filenames,$csvFilename) {
+    public static function convertXmlFilesToCsv($filenames,$csvFilename,$force = false) {
 
         if (is_string($filenames)) {
             $filenames = [$filenames];
@@ -479,7 +492,7 @@ class FatturaPA
 
         $csvService = new FatturaPAToCsv($filenames);
 
-        $csvService->getCsvFile($csvFilename);
+        $csvService->getCsvFile($csvFilename,$force);
 
     }
 

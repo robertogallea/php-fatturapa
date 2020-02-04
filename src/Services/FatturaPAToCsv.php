@@ -13,6 +13,7 @@ use Robertogallea\FatturaPA\Model\Common\DatiAnagrafici\Anagrafica;
 use Robertogallea\FatturaPA\Model\Common\DatiAnagrafici;
 use Robertogallea\FatturaPA\Model\Common\DatiAnagrafici\IdFiscaleIVA;
 use Robertogallea\FatturaPA\Model\Common\Sede;
+use Robertogallea\FatturaPA\Model\FatturaBase;
 use Robertogallea\FatturaPA\Model\Ordinaria\FatturaElettronicaBody\Allegati;
 use Robertogallea\FatturaPA\Model\Ordinaria\FatturaElettronicaBody\DatiBeniServizi\DettaglioLinee\AltriDatiGestionali;
 use Robertogallea\FatturaPA\Model\Ordinaria\FatturaElettronicaBody\DatiBeniServizi\DettaglioLinee\CodiceArticolo;
@@ -79,7 +80,7 @@ class FatturaPAToCsv
 
         $csvContent = $this->buildCsv();
 
-        $file = fopen($filename,'0755');
+        $file = fopen($filename,'w+');
         fwrite($file,$csvContent);
         fclose($file);
     }
@@ -145,12 +146,15 @@ class FatturaPAToCsv
     protected function addFatturaRow($filename,$rowNumber,$csvContent,&$aliquote) {
         $fattura = FatturaPA::readFromXML($filename,'1.2.1');
 
+        $cedentePrestatore = $fattura->getFatturaElettronicaHeader()->getCedentePrestatore()->getDatiAnagrafici();
+        //$cessonarioCommittente = $fattura->getFatturaElettronicaHeader()->getCessionarioCommittente()->getDatiAnagrafici();
+
         $row = [
             'Prog.' => $rowNumber,
             'Data ricezione' => '',
             'Data fattura' => '',
             'Numero' => '',
-            'Partita Iva' => '',
+            'Partita Iva' => $this->getPartitaIva($cedentePrestatore),
             'Denominazione' => '',
             'Imponibile totale' => '',
             'Imposta totale' => '',
@@ -178,6 +182,10 @@ class FatturaPAToCsv
 
 
         return $csvContent . implode($this->separator,array_values($row)) . $this->breakline;;
+    }
+
+    protected function getPartitaIva(DatiAnagrafici $datiAnagrafici) {
+        return $datiAnagrafici->getIdFiscaleIVA()->getIdPaese() . $datiAnagrafici->getIdFiscaleIVA()->getIdCodice();
     }
 
 
