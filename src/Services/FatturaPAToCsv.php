@@ -49,6 +49,7 @@ use Robertogallea\FatturaPA\Model\Ordinaria\FatturaElettronicaHeader;
 use Robertogallea\FatturaPA\Model\Ordinaria\FatturaElettronicaHeader\RappresentanteFiscale;
 use Robertogallea\FatturaPA\Model\Ordinaria\FatturaElettronicaHeader\TerzoIntermediarioOSoggettoEmittente;
 use Robertogallea\FatturaPA\Model\Ordinaria\FatturaOrdinaria;
+use Robertogallea\FatturaPA\Services\FatturaPAToCsv\CsvRiepilogoType;
 use RobRichards\XMLSecLibs\XMLSecurityDSig;
 use RobRichards\XMLSecLibs\XMLSecurityKey;
 use Sabre\Xml\Reader;
@@ -56,140 +57,121 @@ use Sabre\Xml\Service;
 use Sabre\Xml\Writer;
 
 
-class FatturaPAToCsv
+abstract class FatturaPAToCsv
 {
 
     protected $filenames = [];
     protected $separator = ';';
+    protected $separatorReplacement = ' - ';
     protected $breakline = "\n";
-    protected $csvType;
 
-    public function __construct($filenames = [], $csvType = null) {
+    public static function factory($filenames = [], $csvType = 'riepilogo')
+    {
 
-        $this->filenames = $filenames;
-        $this->csvType = $csvType;
+        $csvType = str_replace(' ', '',ucwords(str_replace(['-', '_'], ' ', $csvType)));
+
+        $className = "\\Robertogallea\\FatturaPA\\Services\\FatturaPAToCsv\\Csv".$csvType."Type";
+        return new $className($filenames);
 
     }
 
 
-    public function getCsvFile($filename,$force = false) {
+    public function getCsvFile($filename, $force = false)
+    {
 
         if (file_exists($filename) && !$force) {
-            throw new \Exception($filename. " is already present in the filesystem. Choose another file or use the 'force' option");
+            throw new \Exception($filename . " is already present in the filesystem. Choose another file or use the 'force' option");
         }
 
         $csvContent = $this->buildCsv();
 
-        $file = fopen($filename,'w+');
-        fwrite($file,$csvContent);
+        $file = fopen($filename, 'w+');
+        fwrite($file, $csvContent);
         fclose($file);
     }
 
 
-    protected function buildCsv() {
+    protected function buildCsv()
+    {
         $csvContent = $this->setHeaders();
 
-        $rowNumber = 1;
-        $aliquote = [];
         foreach ($this->filenames as $filename) {
             if (!file_exists($filename)) {
-                throw new \Exception( $filename. " not found.");
+                throw new \Exception($filename . " not found.");
             }
 
 
-            $csvContent = $this->addFatturaRow($filename,$rowNumber,$csvContent,$aliquote);
-
-            $rowNumber++;
+            $csvContent = $this->addFatturaRows($filename, $csvContent);
         }
 
         return $csvContent;
     }
 
-    protected function setHeaders() {
-
-        $headers = [
-
-            'Prog.',
-            'Data ricezione',
-            'Data fattura',
-            'Numero',
-            'Partita Iva',
-            'Denominazione',
-            'Imponibile totale',
-            'Imposta totale',
-            'Importo totale',
-            'Arrotondamento',
-            'File',
-
-            'Aliquota 1',
-            'Imponibile aliquota 1',
-            'Imposta aliquota 1',
-            'Importo aliquota 1',
-            'Aliquota 2',
-            'Imponibile aliquota 2',
-            'Imposta aliquota 2',
-            'Importo aliquota 2',
-            'Aliquota 3',
-            'Imponibile aliquota 3',
-            'Imposta aliquota 3',
-            'Importo aliquota 3',
-
-            'Importo esente',
-        ];
-
-        return implode($this->separator,$headers) . $this->breakline;
+    abstract protected function setHeaders();
 
 
-    }
+    abstract protected function addFatturaRows($filename, $csvContent);
 
 
-    protected function addFatturaRow($filename,$rowNumber,$csvContent,&$aliquote) {
-        $fattura = FatturaPA::readFromXML($filename,'1.2.1');
+    protected function getFatturaRowsHeader($fattura)
+    {
 
         $cedentePrestatore = $fattura->getFatturaElettronicaHeader()->getCedentePrestatore()->getDatiAnagrafici();
         //$cessonarioCommittente = $fattura->getFatturaElettronicaHeader()->getCessionarioCommittente()->getDatiAnagrafici();
 
-        $row = [
-            'Prog.' => $rowNumber,
-            'Data ricezione' => '',
-            'Data fattura' => '',
-            'Numero' => '',
+        return [
             'Partita Iva' => $this->getPartitaIva($cedentePrestatore),
-            'Denominazione' => '',
-            'Imponibile totale' => '',
-            'Imposta totale' => '',
-            'Importo totale' => '',
-            'Arrotondamento' => '',
-            'File' => substr($filename,strrpos($filename,'/')+1),
-
-            'Aliquota 1' => '',
-            'Imponibile aliquota 1' => '',
-            'Imposta aliquota 1' => '',
-            'Importo aliquota 1' => '',
-            'Aliquota 2' => '',
-            'Imponibile aliquota 2' => '',
-            'Imposta aliquota 2' => '',
-            'Importo aliquota 2' => '',
-            'Aliquota 3' => '',
-            'Imponibile aliquota 3' => '',
-            'Imposta aliquota 3' => '',
-            'Importo aliquota 3' => '',
-
-            'Importo esente' => '',
-
+            'Denominazione' => $this->getNominativo($cedentePrestatore),
         ];
-
-
-
-        return $csvContent . implode($this->separator,array_values($row)) . $this->breakline;;
     }
 
-    protected function getPartitaIva(DatiAnagrafici $datiAnagrafici) {
+    protected function getFatturaRowsBodyGenerali($fatturaBody)
+    {
+
+        $datiGeneraliDocumento = $fatturaBody->getDatiGenerali()->getDatiGeneraliDocumento();
+        $datiRicezione = $fatturaBody->getDatiGenerali()->getDatiRicezione();
+
+        $causale = $this->replaceSeparator($datiGeneraliDocumento->getCausale());
+
+
+        return [
+            'Data ricezione' => $datiRicezione ? $datiRicezione->getData() : '',
+            'Data fattura' => $datiGeneraliDocumento->getData(),
+            'Numero' => $datiGeneraliDocumento->getNumero(),
+            'Causale' => $causale,
+            'Importo documento' => $datiGeneraliDocumento->getImportoTotaleDocumento(),
+            'Arrotondamento documento' => $datiGeneraliDocumento->getArrotondamento(),
+        ];
+    }
+
+
+    protected function getPartitaIva(DatiAnagrafici $datiAnagrafici)
+    {
         return $datiAnagrafici->getIdFiscaleIVA()->getIdPaese() . $datiAnagrafici->getIdFiscaleIVA()->getIdCodice();
     }
 
+    protected function getNominativo(DatiAnagrafici $datiAnagrafici)
+    {
+        $anagrafica = $datiAnagrafici->getAnagrafica();
+        return $anagrafica->getDenominazione() ?: $anagrafica->getCognome() . ' ' . $anagrafica->getNome();
+    }
 
+    protected function replaceSeparator($part)
+    {
+        if (is_array($part)) {
+            $part = implode($this->separatorReplacement, $part);
+        }
+        return str_replace($this->separator, $this->separatorReplacement, $part);
+    }
 
+    protected function echoPart($part)
+    {
+
+        echo '<pre>';
+        print_r($part);
+        echo '</pre>';
+
+    }
 
 
 }

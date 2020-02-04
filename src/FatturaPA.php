@@ -490,7 +490,7 @@ class FatturaPA
             $filenames = [$filenames];
         }
 
-        $csvService = new FatturaPAToCsv($filenames);
+        $csvService = FatturaPAToCsv::factory($filenames);
 
         $csvService->getCsvFile($csvFilename,$force);
 
