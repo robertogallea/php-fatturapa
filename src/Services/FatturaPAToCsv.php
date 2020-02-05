@@ -60,32 +60,34 @@ use Sabre\Xml\Writer;
 abstract class FatturaPAToCsv
 {
 
-    protected $filenames = [];
+    protected $fatture = [];
+    protected $currentFattura;
+    protected $currentFilename;
     protected $separator = ';';
     protected $separatorReplacement = ' - ';
     protected $breakline = "\n";
 
-    public static function factory($filenames = [], $csvType = 'riepilogo')
+    public static function factory($fatture = [], $csvType = 'riepilogo')
     {
 
         $csvType = str_replace(' ', '',ucwords(str_replace(['-', '_'], ' ', $csvType)));
 
         $className = "\\Robertogallea\\FatturaPA\\Services\\FatturaPAToCsv\\Csv".$csvType."Type";
-        return new $className($filenames);
+        return new $className($fatture);
 
     }
 
 
-    public function getCsvFile($filename, $force = false)
+    public function getCsvFile($csvFilename, $force = false)
     {
 
-        if (file_exists($filename) && !$force) {
-            throw new \Exception($filename . " is already present in the filesystem. Choose another file or use the 'force' option");
+        if (file_exists($csvFilename) && !$force) {
+            throw new \Exception($csvFilename . " is already present in the filesystem. Choose another file or use the 'force' option");
         }
 
         $csvContent = $this->buildCsv();
 
-        $file = fopen($filename, 'w+');
+        $file = fopen($csvFilename, 'w+');
         fwrite($file, $csvContent);
         fclose($file);
     }
@@ -95,13 +97,23 @@ abstract class FatturaPAToCsv
     {
         $csvContent = $this->setHeaders();
 
-        foreach ($this->filenames as $filename) {
-            if (!file_exists($filename)) {
-                throw new \Exception($filename . " not found.");
+        foreach ($this->fatture as $fattura) {
+
+            $this->currentFilename = null;
+            if (is_string($fattura)) {
+                if (!file_exists($fattura)) {
+                    throw new \Exception($fattura . " not found.");
+                }
+                $this->currentFilename = substr($fattura, strrpos($fattura, '/') + 1);
+                $fattura = FatturaPA::readFromXML($fattura, '1.2.1');
             }
 
 
-            $csvContent = $this->addFatturaRows($filename, $csvContent);
+            if (!($fattura instanceof FatturaBase)) {
+                throw new \InvalidArgumentException("Trynig to convert to csv a non-FatturaPA element");
+            }
+
+            $csvContent = $this->addFatturaRows($fattura, $csvContent);
         }
 
         return $csvContent;

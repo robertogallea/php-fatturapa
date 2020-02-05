@@ -484,13 +484,13 @@ class FatturaPA
     /**
      * @param string|array $filenames
      */
-    public static function convertXmlFilesToCsv($filenames,$csvFilename,$force = false) {
+    public static function convertFatturePAToCsv($fatture,$csvFilename,$csvType = 'riepilogo',$force = false) {
 
-        if (is_string($filenames)) {
-            $filenames = [$filenames];
+        if (!is_array($fatture)) {
+            $fatture = [$fatture];
         }
 
-        $csvService = FatturaPAToCsv::factory($filenames);
+        $csvService = FatturaPAToCsv::factory($fatture,$csvType);
 
         $csvService->getCsvFile($csvFilename,$force);
 
