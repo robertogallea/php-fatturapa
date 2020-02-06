@@ -67,7 +67,7 @@ class FatturaPA
      * @param null $validateVersion
      * @return FatturaBase
      */
-    public static function readFromXML($filename, $validateVersion = null)
+    public static function readFromXML($filename, $validateVersion = '1.2.1')
     {
         $file = fopen($filename, "r") or die("Unable to open file!");
         $string = fread($file, filesize($filename));
@@ -80,7 +80,7 @@ class FatturaPA
      * @return FatturaBase
      * @throws \Sabre\Xml\ParseException
      */
-    public static function readFromString($string, $validateVersion = null)
+    public static function readFromString($string, $validateVersion = '1.2.1')
     {
 
         self::validate($string, $validateVersion);
@@ -407,7 +407,7 @@ class FatturaPA
 
     }
 
-    public static function readFromSignedXML($filename, $validateVersion = null)
+    public static function readFromSignedXML($filename, $validateVersion = '1.2.1')
     {
         $file = fopen($filename, "r") or die("Unable to open file!");
         $string = fread($file, filesize($filename));
@@ -417,7 +417,7 @@ class FatturaPA
         return self::readFromString($parsedXML, $validateVersion);
     }
 
-    public static function writeToXMLString($fattura, $validateVersion = null)
+    public static function writeToXMLString($fattura, $validateVersion = '1.2.1')
     {
 
         $service = new Service();
@@ -429,7 +429,7 @@ class FatturaPA
         return $data;
     }
 
-    public static function writeToXML($fattura, $filename, $validateVersion = null)
+    public static function writeToXML($fattura, $filename, $validateVersion = '1.2.1')
     {
         $xml = FatturaPA::writeToXMLString($fattura, $validateVersion);
 
@@ -482,9 +482,15 @@ class FatturaPA
 
 
     /**
-     * @param string|array $filenames
+     * @param $fatture - a single FatturaBase object or an array of FatturaBase objects to be converted (the element
+     *                  or the elements of the array could also be a string representing a filename
+     * @param $csvFilename - The name of the exported csv file
+     * @param string $csvType - dettaglio|riepilogo|totali
+     * @param bool $force - force the overwrite of the csv file
+     *
+     *
      */
-    public static function convertFatturePAToCsv($fatture,$csvFilename,$csvType = 'riepilogo',$force = false) {
+    public static function convertFatturePAToCsv($fatture, $csvFilename, $csvType = 'riepilogo', $force = false) {
 
         if (!is_array($fatture)) {
             $fatture = [$fatture];

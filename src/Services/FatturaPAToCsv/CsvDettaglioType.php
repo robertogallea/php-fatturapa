@@ -64,27 +64,24 @@ class CsvDettaglioType extends FatturaPAToCsv
 
         foreach ($fatturaBodies as $fatturaBody) {
             $fatturaRowsBodyGenerali = $this->getFatturaRowsBodyGenerali($fatturaBody);
-            $fatturaRowsBodyDatiRiepilogo = $fatturaBody->getDatiBeniServizi()->getDatiRiepilogo();
+            $fatturaBodyDatiRiepilogo = $fatturaBody->getDatiBeniServizi()->getDatiRiepilogo();
 
-            $riepiloghi = [];
-            foreach ($fatturaRowsBodyDatiRiepilogo as $fatturaBodyDatoRiepilogo) {
 
-                $riepiloghi = array_merge($riepiloghi, $this->getFatturaRowsBodyDatoRiepilogo($fatturaBodyDatoRiepilogo));
-            }
+            $riepiloghi = $this->calculateDatiRiepilogo($fatturaBodyDatiRiepilogo);
 
-            $fatturaRowsBodyDettagliLinee = $fatturaBody->getDatiBeniServizi()->getDettaglioLinee();
+            $fatturaBodyDettagliLinee = $fatturaBody->getDatiBeniServizi()->getDettaglioLinee();
 
-            foreach ($fatturaRowsBodyDettagliLinee as $fatturaBodyDettaglioLinea) {
+            foreach ($fatturaBodyDettagliLinee as $fatturaBodyDettaglioLinea) {
 
-                $fatturaRowsBodyDettaglioLinea = $this->getFatturaRowsBodyDettaglioLinea($fatturaBodyDettaglioLinea);
+                $dettaglioLinea = $this->getFatturaRowsBodyDettaglioLinea($fatturaBodyDettaglioLinea);
 
 
                 $rowArray = array_merge(
                     ['File' => $this->currentFilename],
                     $fatturaRowsHeader,
                     $fatturaRowsBodyGenerali,
-                    $fatturaRowsBodyDettaglioLinea,
-                    $riepiloghi[$fatturaRowsBodyDettaglioLinea['Aliquota']]
+                    $dettaglioLinea,
+                    $riepiloghi[$dettaglioLinea['Aliquota']]
                 );
 
                 $csvContent .= implode($this->separator, array_values($rowArray)) . $this->breakline;
@@ -92,24 +89,6 @@ class CsvDettaglioType extends FatturaPAToCsv
         }
 
         return $csvContent;
-    }
-
-
-    protected function getFatturaRowsBodyDatoRiepilogo($fatturaBodyDatoRiepilogo)
-    {
-
-
-        $imponibile = $fatturaBodyDatoRiepilogo->getImponibileImporto();
-        $imposta = $fatturaBodyDatoRiepilogo->getImposta();
-        $aliquota = $fatturaBodyDatoRiepilogo->getAliquotaIVA();
-        return [$aliquota =>
-            [
-                'Imponibile' => $imponibile,
-                'Imposta' => $imposta,
-                'Importo' => number_format((float)$imponibile + (float)$imposta, 2, '.', ''),
-                'Arrotondamento' => $fatturaBodyDatoRiepilogo->Arrotondamento(),
-            ]
-        ];
     }
 
     protected function getFatturaRowsBodyDettaglioLinea($fatturaBodyDettaglioLinea)

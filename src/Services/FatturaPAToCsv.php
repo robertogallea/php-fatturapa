@@ -168,6 +168,43 @@ abstract class FatturaPAToCsv
         return $anagrafica->getDenominazione() ?: $anagrafica->getCognome() . ' ' . $anagrafica->getNome();
     }
 
+
+    protected function calculateDatiRiepilogo($fatturaBodyDatiRiepilogo) {
+
+
+        /*
+         * Esistono fatture (fatte male ma che passano la validazione ministeriale) con riepiloghi iva ripetuti
+         * con stessa aliquota....... (tipo fatture di nota compagnia telefonica.....)
+         */
+        $riepiloghi = [];
+        foreach ($fatturaBodyDatiRiepilogo as $fatturaBodyDatoRiepilogo) {
+            $imponibile = $fatturaBodyDatoRiepilogo->getImponibileImporto();
+            $imposta = $fatturaBodyDatoRiepilogo->getImposta();
+            $aliquota = $fatturaBodyDatoRiepilogo->getAliquotaIVA();
+            if (!array_key_exists($aliquota,$riepiloghi)) {
+
+                $riepiloghi[$aliquota]['Imponibile'] = (float)$imponibile;
+                $riepiloghi[$aliquota]['Imposta'] = (float)$imposta;
+                $riepiloghi[$aliquota]['Importo'] = (float)$imponibile + (float)$imposta;
+                $riepiloghi[$aliquota]['Arrotondamento'] = (float)$fatturaBodyDatoRiepilogo->Arrotondamento();
+            } else {
+                $riepiloghi[$aliquota]['Imponibile'] += (float)$imponibile;
+                $riepiloghi[$aliquota]['Imposta'] += (float)$imposta;
+                $riepiloghi[$aliquota]['Importo'] += (float)$imponibile + (float)$imposta;
+                $riepiloghi[$aliquota]['Arrotondamento'] += (float)$fatturaBodyDatoRiepilogo->Arrotondamento();
+            }
+
+        }
+
+        $riepiloghiFormatted = filter_var($riepiloghi, \FILTER_CALLBACK, ['options' => function($el) {
+            return number_format($el, 2, '.', '');
+        }]);
+
+        return $riepiloghiFormatted;
+
+    }
+
+
     protected function replaceSeparator($part)
     {
         if (is_array($part)) {

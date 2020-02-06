@@ -63,6 +63,20 @@ Follow some basic usage exmaples:
  $xml = FatturaPA::writeToXMLString($fattura); 
 ```
 
+### 2.6 Convert to csv file 
+```php
+/*
+* @param $fatture - a single FatturaBase object or an array of FatturaBase objects to be converted (the element
+*                   or the elements of the array could also be a string representing a filename
+* @param $csvFilename - The name of the exported csv file
+* @param string $csvType - dettaglio|riepilogo|totali
+* @param bool $force - force the overwrite of the csv file
+*
+* 
+*/
+ FatturaPA::convertFatturePAToCsv($fatture,$csvFilename,$csvType,$force) 
+```
+
 ## 3. Attachment handling
 php-fatturapa provides methods for easily add and 
 extract attachments to and from the XML document.<br>

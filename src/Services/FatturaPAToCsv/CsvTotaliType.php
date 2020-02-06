@@ -13,7 +13,7 @@ use Robertogallea\FatturaPA\Model\Common\DatiAnagrafici;
 use Robertogallea\FatturaPA\Services\FatturaPAToCsv;
 
 
-class CsvRiepilogoType extends FatturaPAToCsv
+class CsvTotaliType extends FatturaPAToCsv
 {
 
     public function __construct($filenames = [])
@@ -39,11 +39,6 @@ class CsvRiepilogoType extends FatturaPAToCsv
             'Importo documento',
             'Arrotondamento documento',
 
-            'Aliquota',
-            'Imponibile',
-            'Imposta',
-            'Importo',
-            'Arrotondamento',
 
         ];
 
@@ -61,27 +56,19 @@ class CsvRiepilogoType extends FatturaPAToCsv
 
         foreach ($fatturaBodies as $fatturaBody) {
             $fatturaRowsBodyGenerali = $this->getFatturaRowsBodyGenerali($fatturaBody);
-            $fatturaBodyDatiRiepilogo = $fatturaBody->getDatiBeniServizi()->getDatiRiepilogo();
-            $riepiloghi = $this->calculateDatiRiepilogo($fatturaBodyDatiRiepilogo);
-
-            foreach ($riepiloghi as $aliquota => $fatturaBodyDatoRiepilogo) {
 
 
-                $rowArray = array_merge(
-                    ['File' => $this->currentFilename],
-                    $fatturaRowsHeader,
-                    $fatturaRowsBodyGenerali,
-                    ['Aliquota' => $aliquota],
-                    $fatturaBodyDatoRiepilogo
-                );
+            $rowArray = array_merge(
+                ['File' => $this->currentFilename],
+                $fatturaRowsHeader,
+                $fatturaRowsBodyGenerali
+            );
 
-                $csvContent .= implode($this->separator, array_values($rowArray)) . $this->breakline;
-            }
+            $csvContent .= implode($this->separator, array_values($rowArray)) . $this->breakline;
         }
 
         return $csvContent;
     }
-
 
 
 }
