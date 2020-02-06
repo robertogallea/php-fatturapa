@@ -71,7 +71,7 @@ class CsvRiepilogoType extends FatturaPAToCsv
                     ['File' => $this->currentFilename],
                     $fatturaRowsHeader,
                     $fatturaRowsBodyGenerali,
-                    ['Aliquota' => $aliquota],
+                    ['Aliquota' => $this->formatNumbers((float)$aliquota)],
                     $fatturaBodyDatoRiepilogo
                 );
 

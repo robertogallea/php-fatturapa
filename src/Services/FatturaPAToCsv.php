@@ -66,6 +66,7 @@ abstract class FatturaPAToCsv
     protected $separator = ';';
     protected $separatorReplacement = ' - ';
     protected $breakline = "\n";
+    protected $decimalPointForExporting = ',';
 
     public static function factory($fatture = [], $csvType = 'riepilogo')
     {
@@ -90,6 +91,38 @@ abstract class FatturaPAToCsv
         $file = fopen($csvFilename, 'w+');
         fwrite($file, $csvContent);
         fclose($file);
+    }
+
+    /**
+     * @param string $separator
+     */
+    public function setSeparator(string $separator)
+    {
+        $this->separator = $separator;
+    }
+
+    /**
+     * @param string $separatorReplacement
+     */
+    public function setSeparatorReplacement(string $separatorReplacement)
+    {
+        $this->separatorReplacement = $separatorReplacement;
+    }
+
+    /**
+     * @param string $breakline
+     */
+    public function setBreakline(string $breakline)
+    {
+        $this->breakline = $breakline;
+    }
+
+    /**
+     * @param string $decimalPointForExporting
+     */
+    public function setDecimalPointForExporting(string $decimalPointForExporting)
+    {
+        $this->decimalPointForExporting = $decimalPointForExporting;
     }
 
 
@@ -151,8 +184,8 @@ abstract class FatturaPAToCsv
             'Data fattura' => $datiGeneraliDocumento->getData(),
             'Numero' => $datiGeneraliDocumento->getNumero(),
             'Causale' => $causale,
-            'Importo documento' => $datiGeneraliDocumento->getImportoTotaleDocumento(),
-            'Arrotondamento documento' => $datiGeneraliDocumento->getArrotondamento(),
+            'Importo documento' => $this->formatNumbers((float)$datiGeneraliDocumento->getImportoTotaleDocumento()),
+            'Arrotondamento documento' => $this->formatNumbers((float)$datiGeneraliDocumento->getArrotondamento()),
         ];
     }
 
@@ -196,12 +229,15 @@ abstract class FatturaPAToCsv
 
         }
 
-        $riepiloghiFormatted = filter_var($riepiloghi, \FILTER_CALLBACK, ['options' => function($el) {
-            return number_format($el, 2, '.', '');
+        return $this->formatNumbers($riepiloghi);
+
+    }
+
+
+    protected function formatNumbers($var) {
+        return filter_var($var, \FILTER_CALLBACK, ['options' => function($el) {
+            return number_format($el, 2, $this->decimalPointForExporting, '');
         }]);
-
-        return $riepiloghiFormatted;
-
     }
 
 

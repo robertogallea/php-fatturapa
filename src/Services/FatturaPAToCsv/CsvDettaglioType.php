@@ -75,13 +75,17 @@ class CsvDettaglioType extends FatturaPAToCsv
 
                 $dettaglioLinea = $this->getFatturaRowsBodyDettaglioLinea($fatturaBodyDettaglioLinea);
 
+                $aliquota = $dettaglioLinea['Aliquota'];
+                unset($dettaglioLinea['Aliquota']);
+
 
                 $rowArray = array_merge(
                     ['File' => $this->currentFilename],
                     $fatturaRowsHeader,
                     $fatturaRowsBodyGenerali,
                     $dettaglioLinea,
-                    $riepiloghi[$dettaglioLinea['Aliquota']]
+                    ['Aliquota' => $this->formatNumbers((float)$aliquota)],
+                    $riepiloghi[$aliquota]
                 );
 
                 $csvContent .= implode($this->separator, array_values($rowArray)) . $this->breakline;
@@ -101,7 +105,7 @@ class CsvDettaglioType extends FatturaPAToCsv
         return
             [
                 'Descrizione' => $descrizione,
-                'Prezzo' => $prezzo,
+                'Prezzo' => $this->formatNumbers((float)$prezzo),
                 'Aliquota' => $aliquota,
             ];
     }
