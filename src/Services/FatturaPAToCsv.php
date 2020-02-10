@@ -61,23 +61,97 @@ abstract class FatturaPAToCsv
 {
 
     protected $fatture = [];
-    protected $currentFattura;
     protected $currentFilename;
+    protected $currentFattura;
+    protected $currentBody;
+
+    protected $config;
+    protected $csvSet;
+    protected $csvType;
+    protected $elements;
+
+
     protected $separator = ';';
     protected $separatorReplacement = ' - ';
     protected $breakline = "\n";
     protected $decimalPointForExporting = ',';
 
-    public static function factory($fatture = [], $csvType = 'riepilogo')
+
+    public static function factory($fatture = [], $csvType = 'totali', $configFile = null)
     {
 
-        $csvType = str_replace(' ', '',ucwords(str_replace(['-', '_'], ' ', $csvType)));
+        if (is_null($configFile)) {
+            $configFile = __DIR__ . '/FatturaPAToCsv/config/fatturapa_to_csv.php';
+        }
+        if (!file_exists($configFile)) {
+            throw new \Exception("Configuration file ".$configFile." not found");
+        }
+        $config = include_once $configFile;
 
-        $className = "\\Robertogallea\\FatturaPA\\Services\\FatturaPAToCsv\\Csv".$csvType."Type";
-        return new $className($fatture);
+
+        if (!is_array($config['types']) || !array_key_exists($csvType,$config['types'])) {
+            throw new \InvalidArgumentException("Csv type not defined in configuration");
+        }
+
+        if (!array_key_exists('set',$config['types'][$csvType])) {
+            throw new \InvalidArgumentException("You must include a 'set' in the csv type definition");
+        }
+
+
+        $csvSet = $config['types'][$csvType]['set'];
+        $csvSet = str_replace(' ', '',ucwords(str_replace(['-', '_'], ' ', $csvSet)));
+
+        $className = "\\Robertogallea\\FatturaPA\\Services\\FatturaPAToCsv\\Csv".$csvSet."Set";
+        return new $className($fatture,$config,$csvType);
 
     }
 
+    public function __construct($fatture,$config,$csvType) {
+        $this->fatture = $fatture;
+        $this->config = $config;
+        $this->csvType = $csvType;
+
+        $csvTypeConfiguration = $this->config['types'][$this->csvType];
+
+        if (!array_key_exists('elements',$csvTypeConfiguration) || !is_array($csvTypeConfiguration['elements'])) {
+            throw new \InvalidArgumentException("Elements of csv type must be defined and must be an array");
+        }
+
+        $this->elements = $csvTypeConfiguration['elements'];
+
+        $this->detailLevel = array_key_exists('detail_level',$csvTypeConfiguration)
+            ? $csvTypeConfiguration['detail_level']
+            : $this->getDefaultDetailLevel();
+
+    }
+
+
+    protected function getDefaultDetailLevel() {
+
+        $csvSetComponents = $this->config['sets'][$this->csvSet];
+
+        return last($csvSetComponents);
+
+    }
+
+
+    protected function getElementMethodName($element) {
+        return 'get'.str_replace(' ','',ucwords(str_replace(['.','-', '_'], ' ', $element))).'Element';
+    }
+
+    protected function addFatturaRow() {
+
+        $csvRow = "";
+        foreach ($this->elements as $element) {
+
+            $methodName = $this->getElementMethodName($element);
+            $csvRow .= $this->$methodName() . $this->separator;
+
+        }
+
+        return $csvRow . $this->breakline;
+
+    }
 
     public function getCsvFile($csvFilename, $force = false)
     {
@@ -146,91 +220,44 @@ abstract class FatturaPAToCsv
                 throw new \InvalidArgumentException("Trynig to convert to csv a non-FatturaPA element");
             }
 
-            $csvContent = $this->addFatturaRows($fattura, $csvContent);
+            $this->currentFattura = $fattura;
+
+            $csvContent .= $this->addFatturaRows();
+
         }
 
         return $csvContent;
     }
 
-    abstract protected function setHeaders();
+    abstract protected function addFatturaRows();
 
-
-    abstract protected function addFatturaRows($filename, $csvContent);
-
-
-    protected function getFatturaRowsHeader($fattura)
-    {
-
-        $cedentePrestatore = $fattura->getFatturaElettronicaHeader()->getCedentePrestatore()->getDatiAnagrafici();
-        //$cessonarioCommittente = $fattura->getFatturaElettronicaHeader()->getCessionarioCommittente()->getDatiAnagrafici();
-
-        return [
-            'Partita Iva' => $this->getPartitaIva($cedentePrestatore),
-            'Denominazione' => $this->getNominativo($cedentePrestatore),
-        ];
+    public function setLabels($labels) {
+        $this->config['labels'] = array_merge($this->config['labels'],$labels);
     }
 
-    protected function getFatturaRowsBodyGenerali($fatturaBody)
-    {
-
-        $datiGeneraliDocumento = $fatturaBody->getDatiGenerali()->getDatiGeneraliDocumento();
-        $datiRicezione = $fatturaBody->getDatiGenerali()->getDatiRicezione();
-
-        $causale = $this->replaceSeparator($datiGeneraliDocumento->getCausale());
-
-
-        return [
-            'Data ricezione' => $datiRicezione ? $datiRicezione->getData() : '',
-            'Data fattura' => $datiGeneraliDocumento->getData(),
-            'Numero' => $datiGeneraliDocumento->getNumero(),
-            'Causale' => $causale,
-            'Importo documento' => $this->formatNumbers((float)$datiGeneraliDocumento->getImportoTotaleDocumento()),
-            'Arrotondamento documento' => $this->formatNumbers((float)$datiGeneraliDocumento->getArrotondamento()),
-        ];
+    public function getLabels() {
+        return $this->config['labels'];
     }
 
 
-    protected function getPartitaIva(DatiAnagrafici $datiAnagrafici)
-    {
-        return $datiAnagrafici->getIdFiscaleIVA()->getIdPaese() . $datiAnagrafici->getIdFiscaleIVA()->getIdCodice();
-    }
-
-    protected function getNominativo(DatiAnagrafici $datiAnagrafici)
-    {
-        $anagrafica = $datiAnagrafici->getAnagrafica();
-        return $anagrafica->getDenominazione() ?: $anagrafica->getCognome() . ' ' . $anagrafica->getNome();
-    }
 
 
-    protected function calculateDatiRiepilogo($fatturaBodyDatiRiepilogo) {
+    protected function setHeaders() {
+        $labels = $this->config['labels'];
+        $elements = $this->elements;
 
-
-        /*
-         * Esistono fatture (fatte male ma che passano la validazione ministeriale) con riepiloghi iva ripetuti
-         * con stessa aliquota....... (tipo fatture di nota compagnia telefonica.....)
-         */
-        $riepiloghi = [];
-        foreach ($fatturaBodyDatiRiepilogo as $fatturaBodyDatoRiepilogo) {
-            $imponibile = $fatturaBodyDatoRiepilogo->getImponibileImporto();
-            $imposta = $fatturaBodyDatoRiepilogo->getImposta();
-            $aliquota = $fatturaBodyDatoRiepilogo->getAliquotaIVA();
-            if (!array_key_exists($aliquota,$riepiloghi)) {
-
-                $riepiloghi[$aliquota]['Imponibile'] = (float)$imponibile;
-                $riepiloghi[$aliquota]['Imposta'] = (float)$imposta;
-                $riepiloghi[$aliquota]['Importo'] = (float)$imponibile + (float)$imposta;
-                $riepiloghi[$aliquota]['Arrotondamento'] = (float)$fatturaBodyDatoRiepilogo->Arrotondamento();
+        $headerLine = "";
+        foreach ($elements as $element) {
+            if (!array_key_exists($element,$labels)) {
+                $label = $element;
             } else {
-                $riepiloghi[$aliquota]['Imponibile'] += (float)$imponibile;
-                $riepiloghi[$aliquota]['Imposta'] += (float)$imposta;
-                $riepiloghi[$aliquota]['Importo'] += (float)$imponibile + (float)$imposta;
-                $riepiloghi[$aliquota]['Arrotondamento'] += (float)$fatturaBodyDatoRiepilogo->Arrotondamento();
+                $label = $labels[$element];
             }
 
+            $headerLine .= $label . $this->separator;
         }
 
-        return $this->formatNumbers($riepiloghi);
-
+        return $headerLine . $this->breakline;
     }
 
 
