@@ -2,15 +2,19 @@
 
 return [
 
+    'sets_default_namespace' => "\\Robertogallea\\FatturaPA\\Services\\FatturaPAToCsv",
     'sets' => [
         'contabilita' => [
-            'header',
-            'documento',
-            'riepilogoiva',
-            'dettagliolinea'
-        ]
+            'components' => [
+                'header',
+                'documento',
+                'riepilogoiva',
+                'dettagliolinea'
+            ],
+            'default_detail_level' => 'dettagliolinea',
+            //'class_name' => "\\Robertogallea\\FatturaPA\\Services\\FatturaPAToCsv\\CsvContabilitaSet"
+        ],
     ],
-
     'available_elements' => [
 
         'header' => [

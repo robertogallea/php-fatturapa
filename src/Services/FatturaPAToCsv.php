@@ -9,52 +9,7 @@
 namespace Robertogallea\FatturaPA\Services;
 
 use Robertogallea\FatturaPA\FatturaPA;
-use Robertogallea\FatturaPA\Model\Common\DatiAnagrafici\Anagrafica;
-use Robertogallea\FatturaPA\Model\Common\DatiAnagrafici;
-use Robertogallea\FatturaPA\Model\Common\DatiAnagrafici\IdFiscaleIVA;
-use Robertogallea\FatturaPA\Model\Common\Sede;
 use Robertogallea\FatturaPA\Model\FatturaBase;
-use Robertogallea\FatturaPA\Model\Ordinaria\FatturaElettronicaBody\Allegati;
-use Robertogallea\FatturaPA\Model\Ordinaria\FatturaElettronicaBody\DatiBeniServizi\DettaglioLinee\AltriDatiGestionali;
-use Robertogallea\FatturaPA\Model\Ordinaria\FatturaElettronicaBody\DatiBeniServizi\DettaglioLinee\CodiceArticolo;
-use Robertogallea\FatturaPA\Model\Ordinaria\FatturaElettronicaBody\DatiBeniServizi;
-use Robertogallea\FatturaPA\Model\Ordinaria\FatturaElettronicaBody\DatiBeniServizi\DatiRiepilogo;
-use Robertogallea\FatturaPA\Model\Ordinaria\FatturaElettronicaBody\DatiBeniServizi\DettaglioLinee;
-use Robertogallea\FatturaPA\Model\Ordinaria\FatturaElettronicaBody\DatiGenerali\DatiTrasporto\DatiAnagraficiVettore;
-use Robertogallea\FatturaPA\Model\Ordinaria\FatturaElettronicaBody\DatiGenerali\DatiGeneraliDocumento\DatiBollo;
-use Robertogallea\FatturaPA\Model\Ordinaria\FatturaElettronicaBody\DatiGenerali\DatiGeneraliDocumento\DatiCassaPrevidenziale;
-use Robertogallea\FatturaPA\Model\Ordinaria\FatturaElettronicaBody\DatiGenerali\DatiDDT;
-use Robertogallea\FatturaPA\Model\Ordinaria\FatturaElettronicaBody\DatiGenerali;
-use Robertogallea\FatturaPA\Model\Ordinaria\FatturaElettronicaBody\DatiGenerali\DatiGeneraliDocumento;
-use Robertogallea\FatturaPA\Model\Ordinaria\FatturaElettronicaBody\DatiGenerali\DatiOrdineAcquisto;
-use Robertogallea\FatturaPA\Model\Ordinaria\FatturaElettronicaBody\DatiGenerali\DatiGeneraliDocumento\DatiRitenuta;
-use Robertogallea\FatturaPA\Model\Ordinaria\FatturaElettronicaBody\DatiGenerali\DatiSAL;
-use Robertogallea\FatturaPA\Model\Ordinaria\FatturaElettronicaBody\DatiGenerali\DatiTrasporto;
-use Robertogallea\FatturaPA\Model\Ordinaria\FatturaElettronicaBody\DatiGenerali\FatturaPrincipale;
-use Robertogallea\FatturaPA\Model\Ordinaria\FatturaElettronicaBody\DatiGenerali\DatiTrasporto\IndirizzoResa;
-use Robertogallea\FatturaPA\Model\Ordinaria\FatturaElettronicaBody\DatiPagamento;
-use Robertogallea\FatturaPA\Model\Ordinaria\FatturaElettronicaBody\DatiPagamento\DettaglioPagamento;
-use Robertogallea\FatturaPA\Model\Ordinaria\FatturaElettronicaBody\DatiVeicoli;
-use Robertogallea\FatturaPA\Model\Common\ScontoMaggiorazione;
-use Robertogallea\FatturaPA\Model\Ordinaria\FatturaElettronicaBody;
-use Robertogallea\FatturaPA\Model\Ordinaria\FatturaElettronicaHeader\CedentePrestatore;
-use Robertogallea\FatturaPA\Model\Ordinaria\FatturaElettronicaHeader\CedentePrestatore\Contatti;
-use Robertogallea\FatturaPA\Model\Ordinaria\FatturaElettronicaHeader\CedentePrestatore\IscrizioneREA;
-use Robertogallea\FatturaPA\Model\Common\StabileOrganizzazione;
-use Robertogallea\FatturaPA\Model\Ordinaria\FatturaElettronicaHeader\CessionarioCommittente;
-use Robertogallea\FatturaPA\Model\Ordinaria\FatturaElettronicaHeader\DatiTrasmissione\ContattiTrasmittente;
-use Robertogallea\FatturaPA\Model\Ordinaria\FatturaElettronicaHeader\DatiTrasmissione;
-use Robertogallea\FatturaPA\Model\Ordinaria\FatturaElettronicaHeader\DatiTrasmissione\IdTrasmittente;
-use Robertogallea\FatturaPA\Model\Ordinaria\FatturaElettronicaHeader;
-use Robertogallea\FatturaPA\Model\Ordinaria\FatturaElettronicaHeader\RappresentanteFiscale;
-use Robertogallea\FatturaPA\Model\Ordinaria\FatturaElettronicaHeader\TerzoIntermediarioOSoggettoEmittente;
-use Robertogallea\FatturaPA\Model\Ordinaria\FatturaOrdinaria;
-use Robertogallea\FatturaPA\Services\FatturaPAToCsv\CsvRiepilogoType;
-use RobRichards\XMLSecLibs\XMLSecurityDSig;
-use RobRichards\XMLSecLibs\XMLSecurityKey;
-use Sabre\Xml\Reader;
-use Sabre\Xml\Service;
-use Sabre\Xml\Writer;
 
 
 abstract class FatturaPAToCsv
@@ -89,21 +44,35 @@ abstract class FatturaPAToCsv
         $config = include_once $configFile;
 
 
-        if (!is_array($config['types']) || !array_key_exists($csvType,$config['types'])) {
+        if (!static::arrayGet(static::arrayGet($config,'types',[]),$csvType)) {
             throw new \InvalidArgumentException("Csv type not defined in configuration");
         }
 
-        if (!array_key_exists('set',$config['types'][$csvType])) {
+        $csvSetClassName = static::buildCsvSetClassName($csvType,$config);
+
+        return new $csvSetClassName($fatture,$config,$csvType);
+    }
+
+    public static function buildCsvSetClassName($csvType,$config) {
+
+
+        $csvSetName = static::arrayGet($config['types'][$csvType],'set',false);
+
+        if ($csvSetName === false) {
             throw new \InvalidArgumentException("You must include a 'set' in the csv type definition");
         }
 
+        $csvSetConfig = static::arrayGet($config['sets'],$csvSetName,[]);
 
-        $csvSet = $config['types'][$csvType]['set'];
-        $csvSet = str_replace(' ', '',ucwords(str_replace(['-', '_'], ' ', $csvSet)));
+        if (array_key_exists('class_name',$csvSetConfig)) {
+            return $csvSetConfig['class_name'];
+        }
 
-        $className = "\\Robertogallea\\FatturaPA\\Services\\FatturaPAToCsv\\Csv".$csvSet."Set";
-        return new $className($fatture,$config,$csvType);
+        $setsDefaultNamespace = static::arrayGet($csvSetConfig,'sets_default_namespace',"\\Robertogallea\\FatturaPA\\Services\\FatturaPAToCsv");
 
+        $csvSetClassName = "Csv".static::camelCase($csvSetName)."Set";
+
+        return $setsDefaultNamespace."\\".$csvSetClassName;
     }
 
     public function __construct($fatture,$config,$csvType) {
@@ -113,25 +82,22 @@ abstract class FatturaPAToCsv
 
         $csvTypeConfiguration = $this->config['types'][$this->csvType];
 
-        if (!array_key_exists('elements',$csvTypeConfiguration) || !is_array($csvTypeConfiguration['elements'])) {
+        $this->elements = static::arrayGet($csvTypeConfiguration,'elements');
+
+        if (!is_array($this->elements)) {
             throw new \InvalidArgumentException("Elements of csv type must be defined and must be an array");
         }
 
-        $this->elements = $csvTypeConfiguration['elements'];
-
-        $this->detailLevel = array_key_exists('detail_level',$csvTypeConfiguration)
-            ? $csvTypeConfiguration['detail_level']
-            : $this->getDefaultDetailLevel();
+        $this->detailLevel = static::arrayGet($csvTypeConfiguration,'detail_level',$this->getDefaultDetailLevel());
 
     }
 
 
     protected function getDefaultDetailLevel() {
+        $sets = static::arrayGet($this->config['sets'],$this->csvSet,[]);
 
-        $csvSetComponents = $this->config['sets'][$this->csvSet];
-
-        return last($csvSetComponents);
-
+        return static::arrayGet($sets,'default_detail_level',
+            last(static::arrayGet($sets,'components',[])));
     }
 
 
@@ -243,6 +209,12 @@ abstract class FatturaPAToCsv
 
 
     protected function setHeaders() {
+
+        $customHeadersMethodName =  'setHeaders'.self::camelCase($this->csvType);
+        if (method_exists($this,$customHeadersMethodName)) {
+            return $this->$customHeadersMethodName();
+        }
+
         $labels = $this->config['labels'];
         $elements = $this->elements;
 
@@ -261,6 +233,9 @@ abstract class FatturaPAToCsv
     }
 
 
+    /*
+     * return numbers formatted with 2 decimals
+     */
     protected function formatNumbers($var) {
         return filter_var($var, \FILTER_CALLBACK, ['options' => function($el) {
             return number_format($el, 2, $this->decimalPointForExporting, '');
@@ -268,6 +243,10 @@ abstract class FatturaPAToCsv
     }
 
 
+    /*
+     * Replace the object's separator character in a value
+     * NO NESTED ARRAYS
+     */
     protected function replaceSeparator($part)
     {
         if (is_array($part)) {
@@ -276,6 +255,22 @@ abstract class FatturaPAToCsv
         return str_replace($this->separator, $this->separatorReplacement, $part);
     }
 
+
+    protected static function camelCase($string,$characters = ['-','_']) {
+        return str_replace(' ','',ucwords(str_replace($characters, ' ', $string)));
+    }
+
+    protected static function arrayGet($array,$element,$default = null) {
+
+        return array_key_exists($element,$array)
+            ? $array[$element]
+            : $default;
+    }
+
+
+    /*
+     * For video debugging
+     */
     protected function echoPart($part)
     {
 
