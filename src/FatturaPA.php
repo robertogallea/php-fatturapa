@@ -71,7 +71,7 @@ class FatturaPA
     {
         $file = fopen($filename, "r") or die("Unable to open file!");
         $string = fread($file, filesize($filename));
-        return self::readFromString($string, $validateVersion);
+        return static::readFromString($string, $validateVersion);
     }
 
     /**
@@ -83,7 +83,7 @@ class FatturaPA
     public static function readFromString($string, $validateVersion = '1.2.1')
     {
 
-        self::validate($string, $validateVersion);
+        static::validate($string, $validateVersion);
 
         $service = new Service();
         $service->elementMap = [
@@ -412,9 +412,9 @@ class FatturaPA
         $file = fopen($filename, "r") or die("Unable to open file!");
         $string = fread($file, filesize($filename));
 
-        $parsedXML = self::stripP7MData($string);
+        $parsedXML = static::stripP7MData($string);
 
-        return self::readFromString($parsedXML, $validateVersion);
+        return static::readFromString($parsedXML, $validateVersion);
     }
 
     public static function writeToXMLString($fattura, $validateVersion = '1.2.1')
@@ -425,7 +425,7 @@ class FatturaPA
             $writer->writeAttribute('versione', $fattura->getVersione());
             $writer->write($fattura);
         });
-        self::validate($data, $validateVersion);
+        static::validate($data, $validateVersion);
         return $data;
     }
 
@@ -473,11 +473,14 @@ class FatturaPA
      */
     protected static function validate($string, $validateVersion)
     {
-        if ($validateVersion && $xsdValidationFile = self::getFatturaPAValidationFile($validateVersion)) {
-            $xmlDoc = new \DOMDocument();
-            $xmlDoc->loadXML($string);
+        $xmlDoc = new \DOMDocument();
+        $xmlDoc->loadXML($string);
+
+        if ($validateVersion && $xsdValidationFile = static::getFatturaPAValidationFile($validateVersion)) {
             $xmlDoc->schemaValidate($xsdValidationFile);
         }
+
+        return $xmlDoc;
     }
 
 
