@@ -96,5 +96,15 @@ trait DocumentoMethodsTrait
         return $this->formatNumbers((float)$datiGeneraliDocumento->getArrotondamento());
     }
 
+    protected function getDocumentoDescrizioniElement() {
+        $dettaglioLinee = $this->currentBody->getDatiBeniServizi()->getDettaglioLinee();
+
+        $descrizioni = "";
+        foreach ($dettaglioLinee as $dettaglioLinea) {
+            $descrizioni .= $dettaglioLinea->getDescrizione() . $this->separator;
+        }
+
+        return $this->replaceSeparator(trim($descrizioni,$this->separator));
+    }
 
 }

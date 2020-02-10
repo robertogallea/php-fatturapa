@@ -74,6 +74,16 @@ trait HeaderMethodsTrait
         return $this->getNominativo($datiCedente);
     }
 
+    protected function getHeaderPartitaivaCessionarioElement() {
+        $datiCessionario = $this->currentFattura->getFatturaElettronicaHeader()->getCessionarioCommittente()->getDatiAnagrafici();
+        return $this->getPartitaIva($datiCessionario);
+    }
+
+    protected function getHeaderDenominazioneCessionarioElement() {
+        $datiCessionario = $this->currentFattura->getFatturaElettronicaHeader()->getCessionarioCommittente()->getDatiAnagrafici();
+        return $this->getNominativo($datiCessionario);
+    }
+
     protected function getPartitaIva(DatiAnagrafici $datiAnagrafici)
     {
         return $datiAnagrafici->getIdFiscaleIVA()->getIdPaese() . $datiAnagrafici->getIdFiscaleIVA()->getIdCodice();

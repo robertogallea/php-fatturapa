@@ -21,6 +21,8 @@ return [
             'file',
             'partitaiva-cedente',
             'denominazione-cedente',
+            'partitaiva-cessionario',
+            'denominazione-cessionario',
         ],
 
         'documento' => [
@@ -31,6 +33,7 @@ return [
             'causale',
             'importo',
             'arrotondamento',
+            'descrizioni',
         ],
 
         'riepilogoiva' => [
@@ -64,6 +67,29 @@ return [
                 'documento.causale',
                 'documento.importo',
                 'documento.arrotondamento',
+                'documento.descrizioni',
+            ]
+        ],
+
+        'riepilogo' => [
+            'set' => 'contabilita',
+            'detail_level' => 'riepilogoiva',
+            'elements' => [
+                'header.file',
+                'header.partitaiva-cedente',
+                'header.denominazione-cedente',
+                'documento.data-ricezione',
+                'documento.data-fattura',
+                'documento.numero',
+                'documento.causale',
+                'documento.importo',
+                'documento.arrotondamento',
+                'documento.descrizioni',
+                'riepilogoiva.aliquota',
+                'riepilogoiva.imponibile',
+                'riepilogoiva.imposta',
+                'riepilogoiva.importo',
+                'riepilogoiva.arrotondamento',
             ]
         ],
         'dettaglio' => [
@@ -86,29 +112,9 @@ return [
                 'riepilogoiva.arrotondamento',
                 'dettagliolinea.prezzo',
                 'dettagliolinea.descrizione',
-                'dettagliolinea.aliquota',
+//                'dettagliolinea.aliquota',
             ]
         ],
-        'riepilogo' => [
-            'set' => 'contabilita',
-            'detail_level' => 'riepilogoiva',
-            'elements' => [
-                'header.file',
-                'header.partitaiva-cedente',
-                'header.denominazione-cedente',
-                'documento.data-ricezione',
-                'documento.data-fattura',
-                'documento.numero',
-                'documento.causale',
-                'documento.importo',
-                'documento.arrotondamento',
-                'riepilogoiva.aliquota',
-                'riepilogoiva.imponibile',
-                'riepilogoiva.imposta',
-                'riepilogoiva.importo',
-                'riepilogoiva.arrotondamento',
-            ]
-        ]
     ],
 
     'labels' => [
@@ -117,6 +123,8 @@ return [
         'header.file' => 'File',
         'header.partitaiva-cedente' => 'Partita Iva',
         'header.denominazione-cedente' => 'Denominazione',
+        'header.partitaiva-cessionario' => 'Partita Iva (committente)',
+        'header.denominazione-cessionario' => 'Denominazione (committente)',
 
         'documento.data-ricezione' => 'Data ricezione',
         'documento.data-fattura' => 'Data fattura',
@@ -124,6 +132,7 @@ return [
         'documento.causale' => 'Causale',
         'documento.importo' => 'Importo fattura',
         'documento.arrotondamento' => 'Arrotondamento fattura',
+        'documento.descrizioni' => 'Descrizioni articoli',
 
 
         'riepilogoiva.aliquota' => 'Aliquota',
