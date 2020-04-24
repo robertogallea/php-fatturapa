@@ -57,7 +57,7 @@ class FatturaElettronicaHeader implements XmlSerializable
                 $this->CessionarioCommittente = $child['value'];
             } elseif ($child['value'] instanceof TerzoIntermediarioOSoggettoEmittente) {
                 $this->TerzoIntermediarioOSoggettoEmittente = $child['value'];
-            } elseif ($child['name'] === 'SoggettoEmittente') {
+            } elseif ($child['name'] === '{}SoggettoEmittente') {
                 $this->SoggettoEmittente = $child['value'];
             }
         }
