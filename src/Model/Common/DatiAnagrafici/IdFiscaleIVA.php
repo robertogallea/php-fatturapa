@@ -61,7 +61,7 @@ class IdFiscaleIVA implements XmlSerializable
      */
     public function setIdPaese($IdPaese)
     {
-        if (strlen($ProgressivoInvio) !== 2) {
+        if (strlen($IdPaese) !== 2) {
             throw new InvalidValueException("IdPaese must be a string of 2 characters");
         }
         $this->IdPaese = $IdPaese;
