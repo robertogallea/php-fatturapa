@@ -52,7 +52,7 @@ class DatiGenerali implements XmlSerializable
     /** @var DatiDDT[] */
     protected $DatiDDT;
 
-    /** @var DatiTrasporto */
+    /** @var DatiTrasporto[] */
     protected $DatiTrasporto;
 
     /** @var FatturaPrincipale */
@@ -80,7 +80,7 @@ class DatiGenerali implements XmlSerializable
             } elseif ($child['value'] instanceof DatiOrdineAcquisto) {
                 $this->DatiOrdineAcquisto[] = $child['value'];
             } elseif ($child['value'] instanceof DatiTrasporto) {
-                $this->DatiTrasporto = $child['value'];
+                $this->DatiTrasporto[] = $child['value'];
             } elseif ($child['value'] instanceof FatturaPrincipale) {
                 $this->FatturaPrincipale = $child['value'];
             }

@@ -64,6 +64,10 @@ class DatiTrasporto implements XmlSerializable
     {
         $children = $reader->parseInnerTree();
 
+        if (is_null($children)) {
+            return;
+        }
+
         foreach ($children as $child) {
             if ($child['value'] instanceof DatiAnagraficiVettore) {
                 $this->DatiAnagraificiVettore = $child['value'];
