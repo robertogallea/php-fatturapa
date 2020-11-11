@@ -12,6 +12,7 @@ use Robertogallea\FatturaPA\Model\Common\DatiAnagrafici\Anagrafica;
 use Robertogallea\FatturaPA\Model\Common\DatiAnagrafici;
 use Robertogallea\FatturaPA\Model\Common\DatiAnagrafici\IdFiscaleIVA;
 use Robertogallea\FatturaPA\Model\Common\Sede;
+use Robertogallea\FatturaPA\Model\FatturaBase;
 use Robertogallea\FatturaPA\Model\Ordinaria\FatturaElettronicaBody\Allegati;
 use Robertogallea\FatturaPA\Model\Ordinaria\FatturaElettronicaBody\DatiBeniServizi\DettaglioLinee\AltriDatiGestionali;
 use Robertogallea\FatturaPA\Model\Ordinaria\FatturaElettronicaBody\DatiBeniServizi\DettaglioLinee\CodiceArticolo;
@@ -47,6 +48,7 @@ use Robertogallea\FatturaPA\Model\Ordinaria\FatturaElettronicaHeader;
 use Robertogallea\FatturaPA\Model\Ordinaria\FatturaElettronicaHeader\RappresentanteFiscale;
 use Robertogallea\FatturaPA\Model\Ordinaria\FatturaElettronicaHeader\TerzoIntermediarioOSoggettoEmittente;
 use Robertogallea\FatturaPA\Model\Ordinaria\FatturaOrdinaria;
+use Robertogallea\FatturaPA\Services\FatturaPAToCsv;
 use RobRichards\XMLSecLibs\XMLSecurityDSig;
 use RobRichards\XMLSecLibs\XMLSecurityKey;
 use Sabre\Xml\Reader;
@@ -59,17 +61,29 @@ class FatturaPA
 
     const AVAILABLE_VALIDATIONS = ['1.2.1'];
 
-    public static function readFromXML($filename, $validateVersion = null)
+
+    /**
+     * @param $filename
+     * @param null $validateVersion
+     * @return FatturaBase
+     */
+    public static function readFromXML($filename, $validateVersion = '1.2.1')
     {
         $file = fopen($filename, "r") or die("Unable to open file!");
         $string = fread($file, filesize($filename));
-        return self::readFromString($string, $validateVersion);
+        return static::readFromString($string, $validateVersion);
     }
 
-    public static function readFromString($string, $validateVersion = null)
+    /**
+     * @param $string
+     * @param null $validateVersion
+     * @return FatturaBase
+     * @throws \Sabre\Xml\ParseException
+     */
+    public static function readFromString($string, $validateVersion = '1.2.1')
     {
 
-        self::validate($string, $validateVersion);
+        static::validate($string, $validateVersion);
 
         $service = new Service();
         $service->elementMap = [
@@ -393,17 +407,17 @@ class FatturaPA
 
     }
 
-    public static function readFromSignedXML($filename, $validateVersion = null)
+    public static function readFromSignedXML($filename, $validateVersion = '1.2.1')
     {
         $file = fopen($filename, "r") or die("Unable to open file!");
         $string = fread($file, filesize($filename));
 
-        $parsedXML = self::stripP7MData($string);
+        $parsedXML = static::stripP7MData($string);
 
-        return self::readFromString($parsedXML, $validateVersion);
+        return static::readFromString($parsedXML, $validateVersion);
     }
 
-    public static function writeToXMLString($fattura, $validateVersion = null)
+    public static function writeToXMLString($fattura, $validateVersion = '1.2.1')
     {
 
         $service = new Service();
@@ -411,11 +425,11 @@ class FatturaPA
             $writer->writeAttribute('versione', $fattura->getVersione());
             $writer->write($fattura);
         });
-        self::validate($data, $validateVersion);
+        static::validate($data, $validateVersion);
         return $data;
     }
 
-    public static function writeToXML($fattura, $filename, $validateVersion = null)
+    public static function writeToXML($fattura, $filename, $validateVersion = '1.2.1')
     {
         $xml = FatturaPA::writeToXMLString($fattura, $validateVersion);
 
@@ -459,11 +473,36 @@ class FatturaPA
      */
     protected static function validate($string, $validateVersion)
     {
-        if ($validateVersion && $xsdValidationFile = self::getFatturaPAValidationFile($validateVersion)) {
-            $xmlDoc = new \DOMDocument();
-            $xmlDoc->loadXML($string);
+        $xmlDoc = new \DOMDocument();
+        $xmlDoc->loadXML($string);
+
+        if ($validateVersion && $xsdValidationFile = static::getFatturaPAValidationFile($validateVersion)) {
             $xmlDoc->schemaValidate($xsdValidationFile);
         }
+
+        return $xmlDoc;
+    }
+
+
+    /**
+     * @param $fatture - a single FatturaBase object or an array of FatturaBase objects to be converted (the element
+     *                  or the elements of the array could also be a string representing a filename
+     * @param $csvFilename - The name of the exported csv file
+     * @param string $csvType - dettaglio|riepilogo|totali
+     * @param bool $force - force the overwrite of the csv file
+     *
+     *
+     */
+    public static function convertFatturePAToCsv($fatture, $csvFilename, $csvType = 'riepilogo', $force = false) {
+
+        if (!is_array($fatture)) {
+            $fatture = [$fatture];
+        }
+
+        $csvService = FatturaPAToCsv::factory($fatture,$csvType);
+
+        $csvService->getCsvFile($csvFilename,$force);
+
     }
 
 }
