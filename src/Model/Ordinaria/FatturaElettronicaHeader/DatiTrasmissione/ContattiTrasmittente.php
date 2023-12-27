@@ -42,7 +42,7 @@ class ContattiTrasmittente implements XmlSerializable
         }
     }
 
-    function xmlSerialize(Writer $writer)
+    function xmlSerialize(Writer $writer): void
     {
         $data = array();
         $this->Telefono ? $data['Telefono'] = $this->Telefono : null;

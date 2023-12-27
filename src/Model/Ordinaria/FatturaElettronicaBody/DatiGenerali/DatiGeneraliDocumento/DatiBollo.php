@@ -38,7 +38,7 @@ class DatiBollo implements XmlSerializable
         }
     }
 
-    function xmlSerialize(Writer $writer)
+    function xmlSerialize(Writer $writer): void
     {
         $data = array();
         $this->BolloVirtuale ? $data['BolloVirtuale'] = $this->BolloVirtuale : null;

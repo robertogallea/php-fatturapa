@@ -63,7 +63,7 @@ class FatturaElettronicaHeader implements XmlSerializable
         }
     }
 
-    function xmlSerialize(Writer $writer)
+    function xmlSerialize(Writer $writer): void
     {
         $data = array();
         $this->DatiTrasmissione ? $data['DatiTrasmissione'] = $this->DatiTrasmissione : null;

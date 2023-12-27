@@ -38,7 +38,7 @@ class DatiVeicoli implements XmlSerializable
         }
     }
 
-    function xmlSerialize(Writer $writer)
+    function xmlSerialize(Writer $writer): void
     {
         $data = array();
         $this->Data ? $data['Data'] = $this->Data : null;
@@ -87,6 +87,6 @@ class DatiVeicoli implements XmlSerializable
         $this->TotalePercorso = $TotalePercorso;
         return $this;
     }
-    
-    
+
+
 }

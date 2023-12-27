@@ -111,7 +111,7 @@ class DettaglioLinee implements XmlSerializable
         }
     }
 
-    function xmlSerialize(Writer $writer)
+    function xmlSerialize(Writer $writer): void
     {
         $data = array();
         $this->NumeroLinea ? $data['NumeroLinea'] = $this->NumeroLinea : null;

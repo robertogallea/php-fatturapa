@@ -92,7 +92,7 @@ class DatiGeneraliDocumento implements XmlSerializable
         }
     }
 
-    function xmlSerialize(Writer $writer)
+    function xmlSerialize(Writer $writer): void
     {
         $data = array();
         $this->TipoDocumento ? $data['TipoDocumento'] = $this->TipoDocumento : null;
@@ -368,6 +368,6 @@ class DatiGeneraliDocumento implements XmlSerializable
         $this->Art73 = $Art73;
         return $this;
     }
-    
-    
+
+
 }

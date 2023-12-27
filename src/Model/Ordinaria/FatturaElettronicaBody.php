@@ -59,7 +59,7 @@ class FatturaElettronicaBody implements XmlSerializable
         }
     }
 
-    function xmlSerialize(Writer $writer)
+    function xmlSerialize(Writer $writer): void
     {
         $data = array();
         $this->DatiGenerali ? $data['DatiGenerali'] = $this->DatiGenerali : null;

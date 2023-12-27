@@ -64,7 +64,7 @@ class CedentePrestatore implements XmlSerializable
         }
     }
 
-    function xmlSerialize(Writer $writer)
+    function xmlSerialize(Writer $writer): void
     {
         $data = array();
         $this->DatiAnagrafici ? $data['DatiAnagrafici'] = $this->DatiAnagrafici : null;
@@ -187,6 +187,6 @@ class CedentePrestatore implements XmlSerializable
         $this->RiferimentoAmministrazione = $RiferimentoAmministrazione;
         return $this;
     }
-    
-    
+
+
 }

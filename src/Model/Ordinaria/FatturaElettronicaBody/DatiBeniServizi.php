@@ -40,7 +40,7 @@ class DatiBeniServizi implements XmlSerializable
         }
     }
 
-    function xmlSerialize(Writer $writer)
+    function xmlSerialize(Writer $writer): void
     {
         $data = array();
         if ($this->DettaglioLinee) {

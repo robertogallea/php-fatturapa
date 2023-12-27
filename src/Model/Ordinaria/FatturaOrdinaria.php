@@ -47,7 +47,7 @@ class FatturaOrdinaria extends FatturaBase
         }
     }
 
-    function xmlSerialize(Writer $writer)
+    function xmlSerialize(Writer $writer): void
     {
         $ns = '{http://ivaservizi.agenziaentrate.gov.it/docs/xsd/fatture/v1.2}';
 

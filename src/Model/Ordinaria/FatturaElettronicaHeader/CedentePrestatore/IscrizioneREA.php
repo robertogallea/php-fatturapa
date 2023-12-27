@@ -53,7 +53,7 @@ class IscrizioneREA implements XmlSerializable
         }
     }
 
-    function xmlSerialize(Writer $writer)
+    function xmlSerialize(Writer $writer): void
     {
         $data = array();
         $this->Ufficio ? $data['Ufficio'] = $this->Ufficio : null;

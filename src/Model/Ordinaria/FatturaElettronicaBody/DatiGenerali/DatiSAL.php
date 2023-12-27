@@ -33,7 +33,7 @@ class DatiSAL implements XmlSerializable
         }
     }
 
-    function xmlSerialize(Writer $writer)
+    function xmlSerialize(Writer $writer): void
     {
         $data = array();
         $this->RiferimentoFase ? $data['RiferimentoFase'] = $this->RiferimentoFase : null;
@@ -60,6 +60,6 @@ class DatiSAL implements XmlSerializable
         $this->RiferimentoFase = $RiferimentoFase;
         return $this;
     }
-    
-    
+
+
 }

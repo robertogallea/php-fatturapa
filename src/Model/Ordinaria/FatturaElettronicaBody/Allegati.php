@@ -55,7 +55,7 @@ class Allegati implements XmlSerializable
         }
     }
 
-    function xmlSerialize(Writer $writer)
+    function xmlSerialize(Writer $writer): void
     {
         $data = array();
         $this->NomeAttachment ? $data['NomeAttachment'] = $this->NomeAttachment : null;

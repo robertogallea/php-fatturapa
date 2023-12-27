@@ -39,7 +39,7 @@ class DatiPagamento implements XmlSerializable
         }
     }
 
-    function xmlSerialize(Writer $writer)
+    function xmlSerialize(Writer $writer): void
     {
         $data = array();
         $this->CondizioniPagamento ? $data['CondizioniPagamento'] = $this->CondizioniPagamento : null;
@@ -89,6 +89,6 @@ class DatiPagamento implements XmlSerializable
         $this->DettaglioPagamento = $DettaglioPagamento;
         return $this;
     }
-    
-    
+
+
 }
