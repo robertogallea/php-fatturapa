@@ -42,7 +42,7 @@ class DatiAnagraficiVettore extends DatiAnagrafici
         }
     }
 
-    function xmlSerialize(Writer $writer)
+    function xmlSerialize(Writer $writer): void
     {
         $data = array();
         $this->IdFiscaleIVA ? $data['IdFiscaleIVA'] = $this->IdFiscaleIVA : null;

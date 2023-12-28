@@ -58,7 +58,7 @@ class Sede implements XmlSerializable
         }
     }
 
-    function xmlSerialize(Writer $writer)
+    function xmlSerialize(Writer $writer): void
     {
         $data = array();
         $this->Indirizzo ? $data['Indirizzo'] = $this->Indirizzo : null;
@@ -195,6 +195,6 @@ class Sede implements XmlSerializable
         $this->Nazione = $Nazione;
         return $this;
     }
-    
-    
+
+
 }

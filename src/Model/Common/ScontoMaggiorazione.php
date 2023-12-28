@@ -43,7 +43,7 @@ class ScontoMaggiorazione implements XmlSerializable
         }
     }
 
-    function xmlSerialize(Writer $writer)
+    function xmlSerialize(Writer $writer): void
     {
         $data = array();
         $this->Tipo ? $data['Tipo'] = $this->Tipo : null;
@@ -114,6 +114,6 @@ class ScontoMaggiorazione implements XmlSerializable
         $this->Importo = $Importo;
         return $this;
     }
-    
-    
+
+
 }

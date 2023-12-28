@@ -43,7 +43,7 @@ class DatiDDT implements XmlSerializable
         }
     }
 
-    function xmlSerialize(Writer $writer)
+    function xmlSerialize(Writer $writer): void
     {
         $data = array();
         $this->NumeroDDT ? $data['NumeroDDT'] = $this->NumeroDDT : null;

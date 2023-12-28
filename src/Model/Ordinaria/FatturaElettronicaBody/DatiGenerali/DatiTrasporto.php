@@ -64,6 +64,10 @@ class DatiTrasporto implements XmlSerializable
     {
         $children = $reader->parseInnerTree();
 
+        if (is_null($children)) {
+            return;
+        }
+
         foreach ($children as $child) {
             if ($child['value'] instanceof DatiAnagraficiVettore) {
                 $this->DatiAnagraificiVettore = $child['value'];
@@ -95,7 +99,7 @@ class DatiTrasporto implements XmlSerializable
         }
     }
 
-    function xmlSerialize(Writer $writer)
+    function xmlSerialize(Writer $writer): void
     {
         $data = array();
         $this->DatiAnagraificiVettore ? $data['DatiAnagraificiVettore'] = $this->DatiAnagraificiVettore : null;
@@ -380,6 +384,6 @@ class DatiTrasporto implements XmlSerializable
         $this->DataOraConsegna = $DataOraConsegna;
         return $this;
     }
-    
-    
+
+
 }

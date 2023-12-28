@@ -48,7 +48,7 @@ class AltriDatiGestionali implements XmlSerializable
         }
     }
 
-    function xmlSerialize(Writer $writer)
+    function xmlSerialize(Writer $writer): void
     {
         $data = array();
         $this->TipoDato ? $data['TipoDato'] = $this->TipoDato : null;

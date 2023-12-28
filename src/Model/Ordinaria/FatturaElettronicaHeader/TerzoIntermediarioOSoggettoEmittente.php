@@ -32,10 +32,20 @@ class TerzoIntermediarioOSoggettoEmittente implements XmlSerializable
         }
     }
 
-    function xmlSerialize(Writer $writer)
+    function xmlSerialize(Writer $writer): void
     {
         $data = array();
         $this->DatiAnagrafici ? $data['DatiAnagrafici'] = $this->DatiAnagrafici : null;
         $writer->write($data);
+    }
+
+    /**
+     * @param DatiAnagrafici $DatiAnagrafici
+     * @return CessionarioCommittente
+     */
+    public function setDatiAnagrafici($DatiAnagrafici)
+    {
+        $this->DatiAnagrafici = $DatiAnagrafici;
+        return $this;
     }
 }

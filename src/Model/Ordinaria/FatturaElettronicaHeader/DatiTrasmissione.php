@@ -60,7 +60,7 @@ class DatiTrasmissione implements XmlSerializable
         }
     }
 
-    function xmlSerialize(Writer $writer)
+    function xmlSerialize(Writer $writer): void
     {
         $data = array();
         $this->IdTrasmittente ? $data['IdTrasmittente'] = $this->IdTrasmittente : null;
@@ -125,7 +125,7 @@ class DatiTrasmissione implements XmlSerializable
      */
     public function setFormatoTrasmissione($FormatoTrasmissione)
     {
-        if (($FormatoTrasmissione != 'FPA12') || ($FormatoTrasmissione != 'FPR12')) {
+        if (!in_array($FormatoTrasmissione , array('FPA12','FPR12'))) {
             throw new InvalidValueException("FormatoTrasmissione must be a 'FPA12' or 'FPR12'");
         }
         $this->FormatoTrasmissione = $FormatoTrasmissione;

@@ -49,7 +49,7 @@ class DatiRitenuta implements XmlSerializable
         }
     }
 
-    function xmlSerialize(Writer $writer)
+    function xmlSerialize(Writer $writer): void
     {
         $data = array();
         $this->TipoRitenuta ? $data['TipoRitenuta'] = $this->TipoRitenuta : null;
@@ -142,6 +142,6 @@ class DatiRitenuta implements XmlSerializable
         $this->CausalePagamento = $CausalePagamento;
         return $this;
     }
-    
-    
+
+
 }

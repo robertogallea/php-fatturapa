@@ -38,7 +38,7 @@ class IdTrasmittente implements XmlSerializable
         }
     }
 
-    function xmlSerialize(Writer $writer)
+    function xmlSerialize(Writer $writer): void
     {
         $data = array();
         $this->IdPaese ? $data['IdPaese'] = $this->IdPaese : null;

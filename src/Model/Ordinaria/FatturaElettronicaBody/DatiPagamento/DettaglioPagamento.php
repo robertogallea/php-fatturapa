@@ -133,7 +133,7 @@ class DettaglioPagamento implements XmlSerializable
         }
     }
 
-    function xmlSerialize(Writer $writer)
+    function xmlSerialize(Writer $writer): void
     {
         $data = array();
         $this->Beneficiario ? $data['Beneficiario'] = $this->Beneficiario : null;
@@ -600,6 +600,6 @@ class DettaglioPagamento implements XmlSerializable
         $this->CodicePagamento = $CodicePagamento;
         return $this;
     }
-    
-    
+
+
 }

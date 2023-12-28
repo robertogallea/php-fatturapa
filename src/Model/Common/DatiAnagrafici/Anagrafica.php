@@ -53,7 +53,7 @@ class Anagrafica implements XmlSerializable
         }
     }
 
-    function xmlSerialize(Writer $writer)
+    function xmlSerialize(Writer $writer): void
     {
         $data = array();
         $this->Denominazione ? $data['Denominazione'] = $this->Denominazione : null;
@@ -169,5 +169,5 @@ class Anagrafica implements XmlSerializable
         return $this;
     }
 
-    
+
 }

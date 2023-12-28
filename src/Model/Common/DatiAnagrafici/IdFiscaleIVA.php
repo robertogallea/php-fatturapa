@@ -39,7 +39,7 @@ class IdFiscaleIVA implements XmlSerializable
 
     }
 
-    function xmlSerialize(Writer $writer)
+    function xmlSerialize(Writer $writer): void
     {
         $data = array();
         $this->IdPaese ? $data['IdPaese'] = $this->IdPaese : null;
@@ -61,7 +61,7 @@ class IdFiscaleIVA implements XmlSerializable
      */
     public function setIdPaese($IdPaese)
     {
-        if (strlen($ProgressivoInvio) !== 2) {
+        if (strlen($IdPaese) !== 2) {
             throw new InvalidValueException("IdPaese must be a string of 2 characters");
         }
         $this->IdPaese = $IdPaese;
@@ -88,6 +88,6 @@ class IdFiscaleIVA implements XmlSerializable
         $this->IdCodice = $IdCodice;
         return $this;
     }
-    
-    
+
+
 }

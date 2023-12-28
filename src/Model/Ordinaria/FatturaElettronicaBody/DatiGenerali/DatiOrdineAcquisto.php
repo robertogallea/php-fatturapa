@@ -63,7 +63,7 @@ class DatiOrdineAcquisto implements XmlSerializable
         }
     }
 
-    function xmlSerialize(Writer $writer)
+    function xmlSerialize(Writer $writer): void
     {
         $data = array();
         if ($this->RiferimentoNumeroLinea) {
@@ -226,6 +226,6 @@ class DatiOrdineAcquisto implements XmlSerializable
         $this->CodiceCIG = $CodiceCIG;
         return $this;
     }
-    
-    
+
+
 }
