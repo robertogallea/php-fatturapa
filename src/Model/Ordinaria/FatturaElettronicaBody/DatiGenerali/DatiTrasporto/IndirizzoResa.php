@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Created by PhpStorm.
  * User: Roberto Gallea
@@ -8,8 +9,6 @@
 
 namespace Robertogallea\FatturaPA\Model\Ordinaria\FatturaElettronicaBody\DatiGenerali\DatiTrasporto;
 
+use Robertogallea\FatturaPA\Model\Common\Sede;
 
-class IndirizzoResa extends Sede
-{
-
-}
+class IndirizzoResa extends Sede {}
