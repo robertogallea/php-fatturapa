@@ -66,7 +66,7 @@ class DatiPagamento implements XmlSerializable
      */
     public function setCondizioniPagamento($CondizioniPagamento)
     {
-        if (in_array($CondizioniPagamento, ['TP01', 'TP02', 'TP03'])) {
+        if (!in_array($CondizioniPagamento, ['TP01', 'TP02', 'TP03'])) {
             throw new InvalidValueException("CondizioniPagamento must be equal to TP01, TP02 or TP03");
         }
         $this->CondizioniPagamento = $CondizioniPagamento;

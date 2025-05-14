@@ -29,7 +29,7 @@ class FatturaElettronicaHeader implements XmlSerializable
     protected $CedentePrestatore;
 
     /** @var CessionarioCommittente */
-    protected $CessionarioCommittemte;
+    protected $CessionarioCommittente;
 
     /** @var DatiTrasmissione */
     protected $DatiTrasmissione;
@@ -51,11 +51,11 @@ class FatturaElettronicaHeader implements XmlSerializable
             if ($child['value'] instanceof CedentePrestatore) {
                 $this->CedentePrestatore = $child['value'];
             } elseif ($child['value'] instanceof CessionarioCommittente) {
-                $this->CessionarioCommittemte = $child['value'];
+                $this->CessionarioCommittente = $child['value'];
             } elseif ($child['value'] instanceof DatiTrasmissione) {
                 $this->DatiTrasmissione = $child['value'];
             } elseif ($child['value'] instanceof RappresentanteFiscale) {
-                $this->CessionarioCommittemte = $child['value'];
+                $this->CessionarioCommittente = $child['value'];
             } elseif ($child['value'] instanceof TerzoIntermediarioOSoggettoEmittente) {
                 $this->TerzoIntermediarioOSoggettoEmittente = $child['value'];
             } elseif ($child['name'] === '{}SoggettoEmittente') {
@@ -70,7 +70,7 @@ class FatturaElettronicaHeader implements XmlSerializable
         $this->DatiTrasmissione ? $data['DatiTrasmissione'] = $this->DatiTrasmissione : null;
         $this->CedentePrestatore ? $data['CedentePrestatore'] = $this->CedentePrestatore : null;
         $this->RappresentateFiscale ? $data['RappresentanteFiscale'] = $this->RappresentateFiscale : null;
-        $this->CessionarioCommittemte ? $data['CessionarioCommittente'] = $this->CessionarioCommittemte : null;
+        $this->CessionarioCommittente ? $data['CessionarioCommittente'] = $this->CessionarioCommittente : null;
         $this->TerzoIntermediarioOSoggettoEmittente ? $data['TerzoIntermediarioOSoggettoEmittente'] = $this->TerzoIntermediarioOSoggettoEmittente : null;
         $this->SoggettoEmittente ? $data['SoggettoEmittente'] = $this->SoggettoEmittente : null;
         $writer->write($data);
@@ -97,18 +97,18 @@ class FatturaElettronicaHeader implements XmlSerializable
     /**
      * @return CessionarioCommittente
      */
-    public function getCessionarioCommittemte()
+    public function getCessionarioCommittente()
     {
-        return $this->CessionarioCommittemte;
+        return $this->CessionarioCommittente;
     }
 
     /**
-     * @param CessionarioCommittente $CessionarioCommittemte
+     * @param CessionarioCommittente $CessionarioCommittente
      * @return FatturaElettronicaHeader
      */
-    public function setCessionarioCommittemte($CessionarioCommittemte)
+    public function setCessionarioCommittente($CessionarioCommittente)
     {
-        $this->CessionarioCommittemte = $CessionarioCommittemte;
+        $this->CessionarioCommittente = $CessionarioCommittente;
         return $this;
     }
 
