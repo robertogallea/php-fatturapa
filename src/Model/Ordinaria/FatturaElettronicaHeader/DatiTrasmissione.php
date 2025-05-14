@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Created by PhpStorm.
  * User: Roberto Gallea
@@ -43,7 +44,7 @@ class DatiTrasmissione implements XmlSerializable
     {
         $children = $reader->parseInnerTree();
 
-        foreach($children as $child) {
+        foreach ($children as $child) {
             if ($child['value'] instanceof IdTrasmittente) {
                 $this->IdTrasmittente = $child['value'];
             } elseif ($child['name'] === '{}ProgressivoInvio') {
@@ -60,7 +61,7 @@ class DatiTrasmissione implements XmlSerializable
         }
     }
 
-    function xmlSerialize(Writer $writer)
+    function xmlSerialize(Writer $writer): void
     {
         $data = array();
         $this->IdTrasmittente ? $data['IdTrasmittente'] = $this->IdTrasmittente : null;
@@ -177,8 +178,8 @@ class DatiTrasmissione implements XmlSerializable
     }
 
     /**
-    * @return mixed
-    */
+     * @return mixed
+     */
     public function getContattiTrasmittente()
     {
         return $this->ContattiTrasmittente;
@@ -193,8 +194,4 @@ class DatiTrasmissione implements XmlSerializable
         $this->ContattiTrasmittente = $ContattiTrasmittente;
         return $this;
     }
-
-
-
-
 }

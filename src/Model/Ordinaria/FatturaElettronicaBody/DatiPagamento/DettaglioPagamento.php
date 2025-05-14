@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Created by PhpStorm.
  * User: Roberto Gallea
@@ -86,7 +87,7 @@ class DettaglioPagamento implements XmlSerializable
     {
         $children = $reader->parseInnerTree();
 
-        foreach($children as $child) {
+        foreach ($children as $child) {
             if ($child['name'] === '{}Beneficiario') {
                 $this->Beneficiario = $child['value'];
             } elseif ($child['name'] === '{}ModalitaPagamento') {
@@ -133,7 +134,7 @@ class DettaglioPagamento implements XmlSerializable
         }
     }
 
-    function xmlSerialize(Writer $writer)
+    function xmlSerialize(Writer $writer): void
     {
         $data = array();
         $this->Beneficiario ? $data['Beneficiario'] = $this->Beneficiario : null;
@@ -600,6 +601,4 @@ class DettaglioPagamento implements XmlSerializable
         $this->CodicePagamento = $CodicePagamento;
         return $this;
     }
-    
-    
 }

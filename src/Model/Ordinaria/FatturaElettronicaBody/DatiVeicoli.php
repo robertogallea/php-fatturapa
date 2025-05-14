@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Created by PhpStorm.
  * User: Roberto Gallea
@@ -29,7 +30,7 @@ class DatiVeicoli implements XmlSerializable
     {
         $children = $reader->parseInnerTree();
 
-        foreach($children as $child) {
+        foreach ($children as $child) {
             if ($child['name'] === '{}Data') {
                 $this->Data = $child['value'];
             } elseif ($child['name'] === '{}TotalePercorso') {
@@ -38,7 +39,7 @@ class DatiVeicoli implements XmlSerializable
         }
     }
 
-    function xmlSerialize(Writer $writer)
+    function xmlSerialize(Writer $writer): void
     {
         $data = array();
         $this->Data ? $data['Data'] = $this->Data : null;
@@ -87,6 +88,4 @@ class DatiVeicoli implements XmlSerializable
         $this->TotalePercorso = $TotalePercorso;
         return $this;
     }
-    
-    
 }

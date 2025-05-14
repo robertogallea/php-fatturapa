@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Created by PhpStorm.
  * User: Roberto Gallea
@@ -20,7 +21,7 @@ class FatturaPrincipale implements XmlSerializable
 
     /** @var string */
     protected $NumeroFatturaPrincipale;
-    
+
     /** @var string */
     protected $DataFatturaPrincipale;
 
@@ -37,7 +38,7 @@ class FatturaPrincipale implements XmlSerializable
         }
     }
 
-    function xmlSerialize(Writer $writer)
+    function xmlSerialize(Writer $writer): void
     {
         $data = array();
         $this->NumeroFatturaPrincipale ? $data['NumeroFatturaPrincipale'] = $this->NumeroFatturaPrincipale : null;
@@ -80,6 +81,4 @@ class FatturaPrincipale implements XmlSerializable
         $this->DataFatturaPrincipale = $DataFatturaPrincipale;
         return $this;
     }
-    
-    
 }

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Created by PhpStorm.
  * User: Roberto Gallea
@@ -47,7 +48,7 @@ class DatiCassaPrevidenziale implements XmlSerializable
     {
         $children = $reader->parseInnerTree();
 
-        foreach($children as $child) {
+        foreach ($children as $child) {
             if ($child['name'] === '{}TipoCassa') {
                 $this->TipoCassa = $child['value'];
             } elseif ($child['name'] === '{}AlCassa') {
@@ -68,7 +69,7 @@ class DatiCassaPrevidenziale implements XmlSerializable
         }
     }
 
-    function xmlSerialize(Writer $writer)
+    function xmlSerialize(Writer $writer): void
     {
         $data = array();
         $this->TipoCassa ? $data['TipoCassa'] = $this->TipoCassa : null;
@@ -249,6 +250,4 @@ class DatiCassaPrevidenziale implements XmlSerializable
         $this->RiferimentoAmministrazione = $RiferimentoAmministrazione;
         return $this;
     }
-
-
 }

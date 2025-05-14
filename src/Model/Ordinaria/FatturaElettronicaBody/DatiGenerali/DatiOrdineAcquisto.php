@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Created by PhpStorm.
  * User: Roberto Gallea
@@ -44,7 +45,7 @@ class DatiOrdineAcquisto implements XmlSerializable
     {
         $children = $reader->parseInnerTree();
 
-        foreach($children as $child) {
+        foreach ($children as $child) {
             if ($child['name'] === '{}RiferimentoNumeroLinea') {
                 $this->RiferimentoNumeroLinea[] = $child['value'];
             } elseif ($child['name'] === '{}IdDocumento') {
@@ -63,7 +64,7 @@ class DatiOrdineAcquisto implements XmlSerializable
         }
     }
 
-    function xmlSerialize(Writer $writer)
+    function xmlSerialize(Writer $writer): void
     {
         $data = array();
         if ($this->RiferimentoNumeroLinea) {
@@ -226,6 +227,4 @@ class DatiOrdineAcquisto implements XmlSerializable
         $this->CodiceCIG = $CodiceCIG;
         return $this;
     }
-    
-    
 }

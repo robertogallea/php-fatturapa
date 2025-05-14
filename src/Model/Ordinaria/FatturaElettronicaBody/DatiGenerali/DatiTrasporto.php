@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Created by PhpStorm.
  * User: Roberto Gallea
@@ -95,7 +96,7 @@ class DatiTrasporto implements XmlSerializable
         }
     }
 
-    function xmlSerialize(Writer $writer)
+    function xmlSerialize(Writer $writer): void
     {
         $data = array();
         $this->DatiAnagraificiVettore ? $data['DatiAnagraificiVettore'] = $this->DatiAnagraificiVettore : null;
@@ -380,6 +381,4 @@ class DatiTrasporto implements XmlSerializable
         $this->DataOraConsegna = $DataOraConsegna;
         return $this;
     }
-    
-    
 }

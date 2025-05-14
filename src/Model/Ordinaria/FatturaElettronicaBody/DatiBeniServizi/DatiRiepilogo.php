@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Created by PhpStorm.
  * User: Roberto Gallea
@@ -47,7 +48,7 @@ class DatiRiepilogo implements XmlSerializable
     {
         $children = $reader->parseInnerTree();
 
-        foreach($children as $child) {
+        foreach ($children as $child) {
             if ($child['name'] === '{}AliquotaIVA') {
                 $this->AliquotaIVA = $child['value'];
             } elseif ($child['name'] === '{}Natura') {
@@ -68,7 +69,7 @@ class DatiRiepilogo implements XmlSerializable
         }
     }
 
-    function xmlSerialize(Writer $writer)
+    function xmlSerialize(Writer $writer): void
     {
         $data = array();
         $this->AliquotaIVA ? $data['AliquotaIVA'] = $this->AliquotaIVA : null;
@@ -249,6 +250,4 @@ class DatiRiepilogo implements XmlSerializable
         $this->RiferimentoNormativo = $RiferimentoNormativo;
         return $this;
     }
-
-
 }

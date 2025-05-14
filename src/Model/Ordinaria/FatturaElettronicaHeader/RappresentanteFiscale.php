@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Created by PhpStorm.
  * User: Roberto Gallea
@@ -26,14 +27,14 @@ class RappresentanteFiscale implements XmlSerializable
     {
         $children = $reader->parseInnerTree();
 
-        foreach($children as $child) {
+        foreach ($children as $child) {
             if ($child['value'] instanceof DatiAnagrafici) {
                 $this->DatiAnagrafici = $child['value'];
             }
         }
     }
 
-    function xmlSerialize(Writer $writer)
+    function xmlSerialize(Writer $writer): void
     {
         $data = array();
         $this->DatiAnagrafici ? $data['DatiAnagrafici'] = $this->DatiAnagrafici : null;
@@ -57,6 +58,4 @@ class RappresentanteFiscale implements XmlSerializable
         $this->DatiAnagrafici = $DatiAnagrafici;
         return $this;
     }
-
-
 }

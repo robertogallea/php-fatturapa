@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Created by PhpStorm.
  * User: Roberto Gallea
@@ -40,7 +41,7 @@ class Allegati implements XmlSerializable
     {
         $children = $reader->parseInnerTree();
 
-        foreach($children as $child) {
+        foreach ($children as $child) {
             if ($child['name'] === '{}NomeAttachment') {
                 $this->NomeAttachment = $child['value'];
             } elseif ($child['name'] === '{}AlgoritmoCompressione') {
@@ -55,7 +56,7 @@ class Allegati implements XmlSerializable
         }
     }
 
-    function xmlSerialize(Writer $writer)
+    function xmlSerialize(Writer $writer): void
     {
         $data = array();
         $this->NomeAttachment ? $data['NomeAttachment'] = $this->NomeAttachment : null;
@@ -209,11 +210,11 @@ class Allegati implements XmlSerializable
             $filename = pathinfo($file, PATHINFO_FILENAME);
             $ext = pathinfo($file, PATHINFO_EXTENSION);
             $data = $zipFile
-                ->addFile($file, $filename . '.' . $ext)// add an entry from the file
+                ->addFile($file, $filename . '.' . $ext) // add an entry from the file
                 ->outputAsString();
             $data = base64_encode($data);
         } catch (ZipException $ex) {
-            echo($ex);
+            echo ($ex);
         }
 
         return $data;

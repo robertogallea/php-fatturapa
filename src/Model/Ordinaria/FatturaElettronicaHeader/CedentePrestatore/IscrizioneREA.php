@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Created by PhpStorm.
  * User: Roberto Gallea
@@ -38,7 +39,7 @@ class IscrizioneREA implements XmlSerializable
     {
         $children = $reader->parseInnerTree();
 
-        foreach($children as $child) {
+        foreach ($children as $child) {
             if ($child['name'] === '{}Ufficio') {
                 $this->Ufficio = $child['value'];
             } elseif ($child['name'] === '{}NumeroREA') {
@@ -46,14 +47,14 @@ class IscrizioneREA implements XmlSerializable
             } elseif ($child['name'] === '{}CapitaleSociale') {
                 $this->CapitaleSociale = $child['value'];
             } elseif ($child['name'] === '{}SocioUnico') {
-                $this->SocioUnico= $child['value'];
+                $this->SocioUnico = $child['value'];
             } elseif ($child['name'] === '{}StatoLiquidazione') {
                 $this->StatoLiquidazione = $child['value'];
             }
         }
     }
 
-    function xmlSerialize(Writer $writer)
+    function xmlSerialize(Writer $writer): void
     {
         $data = array();
         $this->Ufficio ? $data['Ufficio'] = $this->Ufficio : null;
@@ -168,6 +169,4 @@ class IscrizioneREA implements XmlSerializable
         $this->StatoLiquidazione = $StatoLiquidazione;
         return $this;
     }
-
-
 }

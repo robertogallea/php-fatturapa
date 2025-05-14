@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Created by PhpStorm.
  * User: Roberto Gallea
@@ -31,7 +32,7 @@ class DatiBeniServizi implements XmlSerializable
     {
         $children = $reader->parseInnerTree();
 
-        foreach($children as $child) {
+        foreach ($children as $child) {
             if ($child['value'] instanceof  DettaglioLinee) {
                 $this->DettaglioLinee[] = $child['value'];
             } elseif ($child['value'] instanceof  DatiRiepilogo) {
@@ -40,7 +41,7 @@ class DatiBeniServizi implements XmlSerializable
         }
     }
 
-    function xmlSerialize(Writer $writer)
+    function xmlSerialize(Writer $writer): void
     {
         $data = array();
         if ($this->DettaglioLinee) {
@@ -92,6 +93,4 @@ class DatiBeniServizi implements XmlSerializable
         $this->DatiRiepilogo = $DatiRiepilogo;
         return $this;
     }
-
-
 }

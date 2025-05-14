@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Created by PhpStorm.
  * User: Roberto Gallea
@@ -63,7 +64,7 @@ class DatiGeneraliDocumento implements XmlSerializable
     {
         $children = $reader->parseInnerTree();
 
-        foreach($children as $child) {
+        foreach ($children as $child) {
             if ($child['name'] === '{}TipoDocumento') {
                 $this->TipoDocumento = $child['value'];
             } elseif ($child['name'] === '{}Divisa') {
@@ -80,7 +81,7 @@ class DatiGeneraliDocumento implements XmlSerializable
                 $this->DatiCassaPrevidenziale[] = $child['value'];
             } elseif ($child['value'] instanceof ScontoMaggiorazione) {
                 $this->ScontoMaggiorazione[] = $child['value'];
-            }  elseif ($child['name'] === '{}ImportoTotaleDocumento') {
+            } elseif ($child['name'] === '{}ImportoTotaleDocumento') {
                 $this->ImportoTotaleDocumento = $child['value'];
             } elseif ($child['name'] === '{}Arrotondamento') {
                 $this->Arrotondamento = $child['value'];
@@ -92,7 +93,7 @@ class DatiGeneraliDocumento implements XmlSerializable
         }
     }
 
-    function xmlSerialize(Writer $writer)
+    function xmlSerialize(Writer $writer): void
     {
         $data = array();
         $this->TipoDocumento ? $data['TipoDocumento'] = $this->TipoDocumento : null;
@@ -368,6 +369,4 @@ class DatiGeneraliDocumento implements XmlSerializable
         $this->Art73 = $Art73;
         return $this;
     }
-    
-    
 }

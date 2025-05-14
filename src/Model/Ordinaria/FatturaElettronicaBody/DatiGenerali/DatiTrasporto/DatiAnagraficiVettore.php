@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Created by PhpStorm.
  * User: Roberto Gallea
@@ -42,7 +43,7 @@ class DatiAnagraficiVettore extends DatiAnagrafici
         }
     }
 
-    function xmlSerialize(Writer $writer)
+    function xmlSerialize(Writer $writer): void
     {
         $data = array();
         $this->IdFiscaleIVA ? $data['IdFiscaleIVA'] = $this->IdFiscaleIVA : null;
@@ -72,6 +73,4 @@ class DatiAnagraficiVettore extends DatiAnagrafici
         $this->NumeroLicenzaGuida = $NumeroLicenzaGuida;
         return $this;
     }
-
-
 }

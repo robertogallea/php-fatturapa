@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Created by PhpStorm.
  * User: Roberto Gallea
@@ -29,7 +30,7 @@ class DatiBollo implements XmlSerializable
     {
         $children = $reader->parseInnerTree();
 
-        foreach($children as $child) {
+        foreach ($children as $child) {
             if ($child['name'] === '{}BolloVirtuale') {
                 $this->BolloVirtuale = $child['value'];
             } elseif ($child['name'] === '{}ImportoBollo') {
@@ -38,7 +39,7 @@ class DatiBollo implements XmlSerializable
         }
     }
 
-    function xmlSerialize(Writer $writer)
+    function xmlSerialize(Writer $writer): void
     {
         $data = array();
         $this->BolloVirtuale ? $data['BolloVirtuale'] = $this->BolloVirtuale : null;
@@ -87,6 +88,4 @@ class DatiBollo implements XmlSerializable
         $this->ImportoBollo = $ImportoBollo;
         return $this;
     }
-
-
 }

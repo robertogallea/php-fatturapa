@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Created by PhpStorm.
  * User: Roberto Gallea
@@ -26,14 +27,14 @@ class DatiSAL implements XmlSerializable
     {
         $children = $reader->parseInnerTree();
 
-        foreach($children as $child) {
+        foreach ($children as $child) {
             if ($child['name'] === '{}RiferimentoFase') {
                 $this->RiferimentoFase = $child['value'];
             }
         }
     }
 
-    function xmlSerialize(Writer $writer)
+    function xmlSerialize(Writer $writer): void
     {
         $data = array();
         $this->RiferimentoFase ? $data['RiferimentoFase'] = $this->RiferimentoFase : null;
@@ -60,6 +61,4 @@ class DatiSAL implements XmlSerializable
         $this->RiferimentoFase = $RiferimentoFase;
         return $this;
     }
-    
-    
 }

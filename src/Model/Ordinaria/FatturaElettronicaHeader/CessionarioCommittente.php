@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Created by PhpStorm.
  * User: Roberto Gallea
@@ -37,7 +38,7 @@ class CessionarioCommittente implements XmlSerializable
     {
         $children = $reader->parseInnerTree();
 
-        foreach($children as $child) {
+        foreach ($children as $child) {
             if ($child['value'] instanceof DatiAnagrafici) {
                 $this->DatiAnagrafici = $child['value'];
             } elseif ($child['value'] instanceof Sede) {
@@ -50,7 +51,7 @@ class CessionarioCommittente implements XmlSerializable
         }
     }
 
-    function xmlSerialize(Writer $writer)
+    function xmlSerialize(Writer $writer): void
     {
         $data = array();
         $this->DatiAnagrafici ? $data['DatiAnagrafici'] = $this->DatiAnagrafici : null;
@@ -131,6 +132,4 @@ class CessionarioCommittente implements XmlSerializable
         $this->Sede = $Sede;
         return $this;
     }
-
-
 }

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Created by PhpStorm.
  * User: Roberto Gallea
@@ -36,7 +37,7 @@ class Contatti implements XmlSerializable
             return;
         }
 
-        foreach($children as $child) {
+        foreach ($children as $child) {
             if ($child['name'] === '{}Telefono') {
                 $this->Telefono = $child['value'];
             } elseif ($child['name'] === '{}Email') {
@@ -47,7 +48,7 @@ class Contatti implements XmlSerializable
         }
     }
 
-    function xmlSerialize(Writer $writer)
+    function xmlSerialize(Writer $writer): void
     {
         $data = array();
         $this->Telefono ? $data['Telefono'] = $this->Telefono : null;
@@ -118,6 +119,4 @@ class Contatti implements XmlSerializable
         $this->Fax = $Fax;
         return $this;
     }
-
-
 }

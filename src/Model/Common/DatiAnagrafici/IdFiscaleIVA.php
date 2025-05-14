@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Created by PhpStorm.
  * User: Roberto Gallea
@@ -36,10 +37,9 @@ class IdFiscaleIVA implements XmlSerializable
                 $this->IdCodice = $child['value'];
             }
         }
-
     }
 
-    function xmlSerialize(Writer $writer)
+    function xmlSerialize(Writer $writer): void
     {
         $data = array();
         $this->IdPaese ? $data['IdPaese'] = $this->IdPaese : null;
@@ -88,6 +88,4 @@ class IdFiscaleIVA implements XmlSerializable
         $this->IdCodice = $IdCodice;
         return $this;
     }
-    
-    
 }

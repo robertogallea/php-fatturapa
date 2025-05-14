@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Created by PhpStorm.
  * User: Roberto Gallea
@@ -32,7 +33,7 @@ class DatiDDT implements XmlSerializable
     {
         $children = $reader->parseInnerTree();
 
-        foreach($children as $child) {
+        foreach ($children as $child) {
             if ($child['name'] === '{}NumeroDDT') {
                 $this->NumeroDDT = $child['value'];
             } elseif ($child['name'] === '{}DataDDT') {
@@ -43,7 +44,7 @@ class DatiDDT implements XmlSerializable
         }
     }
 
-    function xmlSerialize(Writer $writer)
+    function xmlSerialize(Writer $writer): void
     {
         $data = array();
         $this->NumeroDDT ? $data['NumeroDDT'] = $this->NumeroDDT : null;
@@ -118,6 +119,4 @@ class DatiDDT implements XmlSerializable
         $this->RiferimentoNumeroLinea = $RiferimentoNumeroLinea;
         return $this;
     }
-
-
 }

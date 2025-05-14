@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Created by PhpStorm.
  * User: Roberto Gallea
@@ -35,7 +36,7 @@ class AltriDatiGestionali implements XmlSerializable
     {
         $children = $reader->parseInnerTree();
 
-        foreach($children as $child) {
+        foreach ($children as $child) {
             if ($child['name'] === '{}TipoDato') {
                 $this->TipoDato = $child['value'];
             } elseif ($child['name'] === '{}RiferimentoTesto') {
@@ -48,7 +49,7 @@ class AltriDatiGestionali implements XmlSerializable
         }
     }
 
-    function xmlSerialize(Writer $writer)
+    function xmlSerialize(Writer $writer): void
     {
         $data = array();
         $this->TipoDato ? $data['TipoDato'] = $this->TipoDato : null;
@@ -114,7 +115,7 @@ class AltriDatiGestionali implements XmlSerializable
      */
     public function setRiferimentoNumero($RiferimentoNumero)
     {
-        if ((strlen($RiferimentoNumero) < 4) || (strlen($RiferimentoNumero) > 21))  {
+        if ((strlen($RiferimentoNumero) < 4) || (strlen($RiferimentoNumero) > 21)) {
             throw new InvalidValueException("RiferimentoNumero must be a string between 4 and 21 characters");
         }
         $this->RiferimentoNumero = $RiferimentoNumero;
@@ -141,6 +142,4 @@ class AltriDatiGestionali implements XmlSerializable
         $this->RiferimentoData = $RiferimentoData;
         return $this;
     }
-
-
 }

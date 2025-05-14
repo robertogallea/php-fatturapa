@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Created by PhpStorm.
  * User: Roberto Gallea
@@ -44,7 +45,7 @@ class FatturaElettronicaBody implements XmlSerializable
     {
         $children = $reader->parseInnerTree();
 
-        foreach($children as $child) {
+        foreach ($children as $child) {
             if ($child['value'] instanceof DatiGenerali) {
                 $this->DatiGenerali = $child['value'];
             } elseif ($child['value'] instanceof DatiBeniServizi) {
@@ -59,11 +60,11 @@ class FatturaElettronicaBody implements XmlSerializable
         }
     }
 
-    function xmlSerialize(Writer $writer)
+    function xmlSerialize(Writer $writer): void
     {
         $data = array();
         $this->DatiGenerali ? $data['DatiGenerali'] = $this->DatiGenerali : null;
-        $this->DatiBeniServizi? $data['DatiBeniServizi'] = $this->DatiBeniServizi : null;
+        $this->DatiBeniServizi ? $data['DatiBeniServizi'] = $this->DatiBeniServizi : null;
         $this->DatiVeicoli ? $data['DatiVeicoli'] = $this->DatiVeicoli : null;
         $this->DatiPagamento ? $data['DatiPagamento'] = $this->DatiPagamento : null;
         $this->Allegati ? $data['Allegati'] = $this->Allegati : null;
@@ -178,5 +179,4 @@ class FatturaElettronicaBody implements XmlSerializable
             }
         }
     }
-
 }

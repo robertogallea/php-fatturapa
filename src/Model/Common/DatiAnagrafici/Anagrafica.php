@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Created by PhpStorm.
  * User: Roberto Gallea
@@ -38,7 +39,7 @@ class Anagrafica implements XmlSerializable
     {
         $children = $reader->parseInnerTree();
 
-        foreach($children as $child) {
+        foreach ($children as $child) {
             if ($child['name'] === '{}Denominazione') {
                 $this->Denominazione = $child['value'];
             } elseif ($child['name'] === '{}Nome') {
@@ -53,7 +54,7 @@ class Anagrafica implements XmlSerializable
         }
     }
 
-    function xmlSerialize(Writer $writer)
+    function xmlSerialize(Writer $writer): void
     {
         $data = array();
         $this->Denominazione ? $data['Denominazione'] = $this->Denominazione : null;
@@ -168,6 +169,4 @@ class Anagrafica implements XmlSerializable
         $this->CodEORI = $CodEORI;
         return $this;
     }
-
-    
 }

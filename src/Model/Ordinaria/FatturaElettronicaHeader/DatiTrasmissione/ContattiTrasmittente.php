@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Created by PhpStorm.
  * User: Roberto Gallea
@@ -33,7 +34,7 @@ class ContattiTrasmittente implements XmlSerializable
             return;
         }
 
-        foreach($children as $child) {
+        foreach ($children as $child) {
             if ($child['name'] === '{}Telefono') {
                 $this->Telefono = $child['value'];
             } elseif ($child['name'] === '{}Email') {
@@ -42,7 +43,7 @@ class ContattiTrasmittente implements XmlSerializable
         }
     }
 
-    function xmlSerialize(Writer $writer)
+    function xmlSerialize(Writer $writer): void
     {
         $data = array();
         $this->Telefono ? $data['Telefono'] = $this->Telefono : null;
@@ -88,6 +89,4 @@ class ContattiTrasmittente implements XmlSerializable
         $this->Email = $Email;
         return $this;
     }
-
-
 }

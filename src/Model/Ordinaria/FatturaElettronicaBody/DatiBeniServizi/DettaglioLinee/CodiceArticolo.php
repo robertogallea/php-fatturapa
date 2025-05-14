@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Created by PhpStorm.
  * User: Roberto Gallea
@@ -29,7 +30,7 @@ class CodiceArticolo implements XmlSerializable
     {
         $children = $reader->parseInnerTree();
 
-        foreach($children as $child) {
+        foreach ($children as $child) {
             if ($child['name'] === '{}CodiceTipo') {
                 $this->CodiceTipo = $child['value'];
             } elseif ($child['name'] === '{}CodiceValore') {
@@ -38,7 +39,7 @@ class CodiceArticolo implements XmlSerializable
         }
     }
 
-    function xmlSerialize(Writer $writer)
+    function xmlSerialize(Writer $writer): void
     {
         $data = array();
         $this->CodiceTipo ? $data['CodiceTipo'] = $this->CodiceTipo : null;
@@ -87,6 +88,4 @@ class CodiceArticolo implements XmlSerializable
         $this->CodiceValore = $CodiceValore;
         return $this;
     }
-
-
 }

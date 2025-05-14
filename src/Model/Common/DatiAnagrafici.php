@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Created by PhpStorm.
  * User: Roberto Gallea
@@ -49,7 +50,7 @@ class DatiAnagrafici implements XmlSerializable
     {
         $children = $reader->parseInnerTree();
 
-        foreach($children as $child) {
+        foreach ($children as $child) {
             if ($child['value'] instanceof IdFiscaleIVA) {
                 $this->IdFiscaleIVA = $child['value'];
             } elseif ($child['value'] instanceof Anagrafica) {
@@ -63,14 +64,14 @@ class DatiAnagrafici implements XmlSerializable
             } elseif ($child['name'] === '{}NumeroIscrizioneAlbo') {
                 $this->NumeroIscrizioneAlbo = $child['value'];
             } elseif ($child['name'] === '{}DataIscrizioneAlbo') {
-                $this->DataIscrizioneAlbo= $child['value'];
+                $this->DataIscrizioneAlbo = $child['value'];
             } elseif ($child['name'] === '{}RegimeFiscale') {
                 $this->RegimeFiscale = $child['value'];
             }
         }
     }
 
-    function xmlSerialize(Writer $writer)
+    function xmlSerialize(Writer $writer): void
     {
         $data = array();
         $this->IdFiscaleIVA ? $data['IdFiscaleIVA'] = $this->IdFiscaleIVA : null;
@@ -245,6 +246,4 @@ class DatiAnagrafici implements XmlSerializable
         $this->RegimeFiscale = $RegimeFiscale;
         return $this;
     }
-    
-    
 }

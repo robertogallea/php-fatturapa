@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Created by PhpStorm.
  * User: Roberto Gallea
@@ -38,7 +39,7 @@ class FatturaOrdinaria extends FatturaBase
 
         $children = $reader->parseInnerTree();
 
-        foreach($children as $child) {
+        foreach ($children as $child) {
             if ($child['value'] instanceof FatturaElettronicaHeader) {
                 $this->FatturaElettronicaHeader = $child['value'];
             } elseif ($child['value'] instanceof FatturaElettronicaBody) {
@@ -47,7 +48,7 @@ class FatturaOrdinaria extends FatturaBase
         }
     }
 
-    function xmlSerialize(Writer $writer)
+    function xmlSerialize(Writer $writer): void
     {
         $ns = '{http://ivaservizi.agenziaentrate.gov.it/docs/xsd/fatture/v1.2}';
 
@@ -96,5 +97,4 @@ class FatturaOrdinaria extends FatturaBase
         $this->FatturaElettronicaBody = $FatturaElettronicaBody;
         return $this;
     }
-
 }

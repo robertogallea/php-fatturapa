@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Created by PhpStorm.
  * User: Roberto Gallea
@@ -29,7 +30,7 @@ class IdTrasmittente implements XmlSerializable
     {
         $children = $reader->parseInnerTree();
 
-        foreach($children as $child) {
+        foreach ($children as $child) {
             if ($child['name'] === '{}IdPaese') {
                 $this->IdPaese = $child['value'];
             } elseif ($child['name'] === '{}IdCodice') {
@@ -38,7 +39,7 @@ class IdTrasmittente implements XmlSerializable
         }
     }
 
-    function xmlSerialize(Writer $writer)
+    function xmlSerialize(Writer $writer): void
     {
         $data = array();
         $this->IdPaese ? $data['IdPaese'] = $this->IdPaese : null;
@@ -87,6 +88,4 @@ class IdTrasmittente implements XmlSerializable
         $this->IdCodice = $IdCodice;
         return $this;
     }
-
-
 }
