@@ -440,8 +440,14 @@ class FatturaPA
         // Namespaced files
         if (strpos($string, ':FatturaElettronica') !== false) {
             $parts = explode(':FatturaElettronica', preg_replace('/[[:^print:]]/', '', $string));
-            $startXml = substr($parts[1], -1);
-            $parts[0] = '<?xml version="1.0" encoding="UTF-8" standalone="yes"?><' . $startXml;
+
+            $namespace  = substr(
+                $parts[0],
+                strripos($parts[0], '<') + 1,
+                strlen($parts[0])
+            );
+
+            $parts[0] = '<?xml version="1.0" encoding="UTF-8" standalone="yes"?><' . $namespace;
             $parts[2] = '>';
             return implode(':FatturaElettronica', $parts);
         }
