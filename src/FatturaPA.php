@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Created by PhpStorm.
  * User: robertogallea
@@ -104,7 +105,6 @@ class FatturaPA
                 $fatturaElettronicaHeader->traverse($reader);
 
                 return $fatturaElettronicaHeader;
-
             },
 
             'DatiTrasmissione' => function (Reader $reader) {
@@ -267,33 +267,33 @@ class FatturaPA
                 return $datiOrdineAcquisto;
             },
 
-//            'DatiContratto' => function(Reader $reader) {
-//                $datiContratto = new DatiContratto();
-//                $datiContratto->traverse($reader);
-//
-//                return $datiContratto;
-//            },
-//
-//            'DatiConvenzione' => function(Reader $reader) {
-//                $datiConvenzione = new DatiConvenzione();
-//                $datiConvenzione->traverse($reader);
-//
-//                return $datiConvenzione;
-//            },
-//
-//            'DatiRicezione' => function(Reader $reader) {
-//                $datiRicezione = new DatiRicezione();
-//                $datiRicezione->traverse($reader);
-//
-//                return $datiRicezione;
-//            },
-//
-//            'DatiFattureCollegate' => function(Reader $reader) {
-//                $datiFattureCollegate = new DatiFattureCollegate();
-//                $datiFattureCollegate->traverse($reader);
-//
-//                return $datiFattureCollegate;
-//            },
+            //            'DatiContratto' => function(Reader $reader) {
+            //                $datiContratto = new DatiContratto();
+            //                $datiContratto->traverse($reader);
+            //
+            //                return $datiContratto;
+            //            },
+            //
+            //            'DatiConvenzione' => function(Reader $reader) {
+            //                $datiConvenzione = new DatiConvenzione();
+            //                $datiConvenzione->traverse($reader);
+            //
+            //                return $datiConvenzione;
+            //            },
+            //
+            //            'DatiRicezione' => function(Reader $reader) {
+            //                $datiRicezione = new DatiRicezione();
+            //                $datiRicezione->traverse($reader);
+            //
+            //                return $datiRicezione;
+            //            },
+            //
+            //            'DatiFattureCollegate' => function(Reader $reader) {
+            //                $datiFattureCollegate = new DatiFattureCollegate();
+            //                $datiFattureCollegate->traverse($reader);
+            //
+            //                return $datiFattureCollegate;
+            //            },
 
             'DatiSAL' => function (Reader $reader) {
                 $datiSAL = new DatiSAL();
@@ -403,8 +403,6 @@ class FatturaPA
         ];
 
         return $service->parse($string);
-
-
     }
 
     public static function readFromSignedXML($filename, $validateVersion = '1.2.1')
@@ -439,21 +437,23 @@ class FatturaPA
 
     private static function stripP7MData($string)
     {
-
-        $newString = preg_replace('/[[:^print:]]/', '', $string);
-
-        $startXml = substr($newString, strpos($newString, '<?xml '));
-
-        preg_match_all('/<\/.+?>/', $startXml, $matches, PREG_OFFSET_CAPTURE);
-        $lastMatch = end($matches[0]);
-        $str = substr($startXml, 0, $lastMatch[1]) . $lastMatch[0];
-        $startAll = strpos($str, "<Allegati");
-        if ($startAll !== false) {
-            $endAll = strpos($str, "</Allegati>");
-            $str = substr($str, 0, $startAll) . substr($str, ($endAll + 11));
+        // Namespaced files
+        if (strpos($string, ':FatturaElettronica') !== false) {
+            $parts = explode(':FatturaElettronica', preg_replace('/[[:^print:]]/', '', $string));
+            $startXml = substr($parts[1], -1);
+            $parts[0] = '<?xml version="1.0" encoding="UTF-8" standalone="yes"?><' . $startXml;
+            $parts[2] = '>';
+            return implode(':FatturaElettronica', $parts);
         }
 
-        return $str;
+        if (strpos($string, 'FatturaElettronica>') !== false) {
+            $parts = explode('FatturaElettronica>', preg_replace('/[[:^print:]]/', '', $string));
+            $header = explode('FatturaElettronica ', $parts[0]);
+            $string = '<?xml version="1.0" encoding="UTF-8" standalone="yes"?><FatturaElettronica ';
+            return $string . $header[1] . 'FatturaElettronica>';
+        }
+
+        return '';
     }
 
     protected static function getFatturaPAValidationFile($validateVersion)
@@ -465,7 +465,6 @@ class FatturaPA
             default:
                 throw new \InvalidArgumentException("Available validation schemas are: [ " . implode(', ', self::AVAILABLE_VALIDATIONS) . " ]");
         }
-
     }
 
     /*
@@ -493,16 +492,15 @@ class FatturaPA
      *
      *
      */
-    public static function convertFatturePAToCsv($fatture, $csvFilename, $csvType = 'riepilogo', $force = false) {
+    public static function convertFatturePAToCsv($fatture, $csvFilename, $csvType = 'riepilogo', $force = false)
+    {
 
         if (!is_array($fatture)) {
             $fatture = [$fatture];
         }
 
-        $csvService = FatturaPAToCsv::factory($fatture,$csvType);
+        $csvService = FatturaPAToCsv::factory($fatture, $csvType);
 
-        $csvService->getCsvFile($csvFilename,$force);
-
+        $csvService->getCsvFile($csvFilename, $force);
     }
-
 }
